@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta id="theme-color-meta" name="theme-color" content="#F2F4EE">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="DogTrainer">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>DogTrainer — Diario de entrenamiento</title>
+<script>try{const p=JSON.parse(localStorage.getItem('dogtrainer_ui_prefs')||'{}'),m=matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.dataset.theme=p.theme==='dark'||(p.theme!=='light'&&m)?'dark':'light'}catch(_){}</script>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232F6B4F'/%3E%3Ccircle cx='17' cy='25' r='7' fill='%23F2F4EE'/%3E%3Ccircle cx='29' cy='16' r='7' fill='%23F2F4EE'/%3E%3Ccircle cx='43' cy='19' r='8' fill='%23D4E157'/%3E%3Ccircle cx='49' cy='33' r='7' fill='%23F2F4EE'/%3E%3Cpath d='M19 48c0-9 6-15 13-15s13 6 13 15c0 6-5 9-13 9s-13-3-13-9Z' fill='%23F2F4EE'/%3E%3Cpath d='M38 14c4 2 7 6 8 10' fill='none' stroke='%232F6B4F' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root{color-scheme:light;--bg:#F2F4EE;--surface:#FCFDF9;--white:#FFF;--ink:#14261F;--muted:#5F7168;--line:#D9E1DA;--grass:#2F6B4F;--grass-dark:#24523D;--grass-soft:#E4EFE7;--ball:#D4E157;--ball-soft:#F1F5C8;--amber:#C98A1B;--amber-soft:#FFF2D6;--amber-ink:#6B4812;--brick:#B1433B;--brick-soft:#FBE9E6;--rest:#665E91;--rest-soft:#EEECF7;--field:#FFF;--field-border:#C9D4CC;--quiet-surface:#F4F6F2;--neutral:#E6E9E5;--track:#E5EAE4;--nav-bg:rgba(252,253,249,.95);--overlay:rgba(20,38,31,.48);--on-dark:#FFF;--on-dark-soft:#D2DDD6;--profile-soft:#C9D5CE;--profile-faint:#D8E1DC;--chart-text:#687970;--dot:#BECBC2;--arrow:#819088;--focus:#2F6B4F;--profile-shadow:0 10px 28px rgba(20,38,31,.12);--shadow-low:0 3px 12px rgba(20,38,31,.06);--shadow-high:0 18px 50px rgba(20,38,31,.18);--r-sm:10px;--r-md:16px;--r-lg:24px;--sp-1:6px;--sp-2:10px;--sp-3:18px;--sp-4:28px;--font:"Segoe UI",system-ui,sans-serif;--app-bg:var(--bg);--surface-alt:var(--quiet-surface);--text:var(--ink);--border:var(--line);--accent:var(--grass);--danger:var(--brick);--radius:var(--r-md);--focus-ring:var(--focus);--author-text:#0F172A;--copyright-text:#94A3B8}
+*{box-sizing:border-box}
+html{min-height:100%;-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;min-width:0;overflow-x:hidden;background:var(--bg);color:var(--ink);font:15px/1.48 var(--font);font-variant-numeric:tabular-nums;-webkit-tap-highlight-color:transparent}
+button,input,textarea,select{font:inherit;color:inherit}button{border:0;cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+input,textarea,select{font-size:16px!important}h1,h2,h3,p{margin:0}
+h1{font-size:32px;line-height:1.06;letter-spacing:-1.05px;font-weight:820;overflow-wrap:anywhere}h2{font-size:22px;line-height:1.16;letter-spacing:-.55px;font-weight:800}h3{font-size:17px;line-height:1.25;font-weight:780}
+small,.small{font-size:13px}.muted{color:var(--muted)}.subtle{font-size:13px;color:var(--muted)}.hide{display:none!important}
+.wrap{width:min(100%,700px);margin:0 auto;padding:calc(20px + env(safe-area-inset-top)) var(--sp-3) calc(112px + env(safe-area-inset-bottom))}
+.row{display:flex;align-items:center;gap:10px}.between{justify-content:space-between}.grow{flex:1;min-width:0}.full{width:100%}.line{height:1px;background:var(--line);margin:14px 0}
+.card{background:var(--white);border:1px solid var(--line);border-radius:var(--r-md);padding:var(--sp-3);margin-bottom:14px}.card-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.topline{display:flex;align-items:center;gap:15px;margin-bottom:28px;min-width:0}.topline:not(.today-profile){padding:4px 2px 0}
+.page-mark{width:46px;height:46px;flex:0 0 46px;border-radius:14px;overflow:hidden;box-shadow:var(--shadow-low)}.page-mark svg{display:block;width:100%;height:100%}
+.head-sub{font-size:15px;color:var(--muted);margin-top:6px}.date{font-size:13px;color:var(--muted);margin-top:5px}
+.today-profile{align-items:center;background:var(--ink);color:var(--surface);padding:18px;border-radius:26px 10px 26px 26px;box-shadow:var(--profile-shadow);margin-bottom:17px}
+.today-profile h1{font-size:28px}.today-profile .date,.today-profile .head-sub{color:var(--profile-soft)}
+.avatar{flex:0 0 64px;width:64px;height:64px;border-radius:50%;background:var(--ball);color:var(--ink);border:3px solid var(--on-dark);display:grid;place-items:center;overflow:hidden;font-size:27px;font-weight:820}.avatar img{width:100%;height:100%;object-fit:cover}
+.day-count{flex:0 0 auto;min-width:62px;text-align:center;background:var(--grass-dark);border:1px solid var(--muted);border-radius:18px;padding:9px 8px}.day-count strong{display:block;font-size:24px;line-height:1;color:var(--ball)}.day-count span{display:block;margin-top:4px;font-size:11px;color:var(--profile-faint)}
+.section-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:30px 2px 13px}.section-bar.first-section{margin-top:0}.section-bar h2{font-size:20px}
+.primary,.secondary,.danger-btn,.tiny-btn,.plain-btn,.quiet,.toggle{min-height:44px;border-radius:var(--r-sm);font-weight:760}
+.primary,.secondary,.danger-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 16px;font-size:15px}
+.primary{background:var(--grass);color:var(--on-dark)}.primary:active{background:var(--grass-dark);transform:translateY(1px)}.secondary{background:var(--grass-soft);color:var(--grass-dark)}.danger-btn{background:var(--brick-soft);color:var(--brick)}
+.plain-btn{padding:7px 8px;background:transparent;color:var(--grass)}.quiet{min-width:44px;padding:8px;background:transparent;color:var(--muted)}.tiny-btn{padding:8px 12px;background:var(--grass-soft);color:var(--grass-dark);font-size:13px}
+.tiny-btn.danger{background:var(--brick-soft);color:var(--brick)}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}.actions>*{flex:1 1 135px}
+.notice{border-left:4px solid var(--amber);background:var(--amber-soft);color:var(--amber-ink);padding:14px 15px;border-radius:4px var(--r-md) var(--r-md) 4px;font-size:13px;margin:12px 0 16px}
+.hint-box{background:var(--grass-soft);color:var(--grass-dark);padding:14px;border-radius:var(--r-sm);font-size:13px;line-height:1.5;margin:12px 0 15px}
+.rest-strip{padding:13px 15px;background:var(--rest-soft);color:var(--rest);border-left:4px solid var(--rest);border-radius:4px var(--r-sm) var(--r-sm) 4px;font-size:13px;margin:0 0 18px}
+.rest-link{display:block;margin:12px auto 0;min-height:44px;padding:10px 12px;background:transparent;color:var(--muted);font-size:13px;text-align:center}
+.install-card{border-radius:var(--r-lg) var(--r-sm) var(--r-lg) var(--r-lg);box-shadow:var(--shadow-low)}
+.sessions-stack{position:relative;display:flex;flex-direction:column;margin:3px 0 8px}.sessions-stack:before{content:"";position:absolute;left:23px;top:28px;bottom:28px;width:3px;border-radius:3px;background:var(--grass)}
+.diary-session{position:relative;padding:0 0 25px 58px;min-width:0}.diary-session:last-child{padding-bottom:4px}
+.session-heading{min-height:52px;display:flex;align-items:center;gap:12px;padding:1px 0 8px}.session-heading h3{font-size:18px}
+.session-emoji{position:absolute;left:0;top:0;z-index:1;width:48px;height:48px;display:grid;place-items:center;border-radius:50%;background:var(--ball);border:4px solid var(--bg);font-size:20px}
+.session-body.diary-body{padding:0}.session-empty{padding:9px 0 12px;color:var(--muted);font-size:13px}
+.add-exercise{width:100%;min-height:50px;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--grass);border-radius:var(--r-md);background:var(--surface);color:var(--grass);font-size:15px;font-weight:780}.add-exercise:active{background:var(--ball-soft);transform:translateY(1px)}.add-icon{font-size:22px;line-height:1}
+.diary-entry{display:flex;align-items:center;gap:10px;width:100%;min-height:58px;padding:9px 2px;background:transparent;color:var(--ink);text-align:left;border-bottom:1px solid var(--line)}.diary-entry:last-of-type{margin-bottom:10px}
+.entry-marker{width:13px;height:13px;flex:0 0 13px;border-radius:50%;background:var(--grass);box-shadow:inset 0 0 0 3px var(--grass-soft)}.entry-marker.mid{background:var(--amber);box-shadow:inset 0 0 0 3px var(--amber-soft)}.entry-marker.bad{background:var(--brick);box-shadow:inset 0 0 0 3px var(--brick-soft)}
+.entry-info{display:flex;flex-direction:column;gap:2px}.entry-info strong{font-size:15px;overflow-wrap:anywhere}.entry-note{font-size:12px;line-height:1.35;color:var(--muted);max-height:34px;overflow:hidden;overflow-wrap:anywhere}.entry-arrow{color:var(--arrow);font-size:21px}
+.pill{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:780;white-space:nowrap;background:var(--grass-soft);color:var(--grass-dark)}.pill.good{background:var(--grass-soft);color:var(--grass-dark)}.pill.mid{background:var(--amber-soft);color:var(--amber-ink)}.pill.bad{background:var(--brick-soft);color:var(--brick)}
+.note-card{padding:5px 0;border:0;border-top:1px solid var(--line);border-radius:0;background:transparent}.note{padding:13px 2px;border-bottom:1px solid var(--line)}.note:last-child{border-bottom:0}.note p{overflow-wrap:anywhere}.note .small{margin-top:7px}
+.empty{padding:24px 12px;color:var(--muted);text-align:center;font-size:14px}.empty .symbol{display:block;margin-bottom:7px;font-size:24px}
+.catalog-card{padding:0;border-radius:0;border:0;background:transparent}.list-item{display:flex;align-items:center;gap:11px;min-height:68px;padding:11px 0;border-bottom:1px solid var(--line);min-width:0}.list-item:last-child{border-bottom:0}.list-item .desc{font-size:13px;color:var(--muted);margin-top:3px;line-height:1.42;overflow-wrap:anywhere}
+.exercise-index{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;border-radius:50%;background:var(--ball-soft);color:var(--grass-dark);font-size:13px;font-weight:820}.exercise-index.archived{background:var(--neutral);color:var(--muted)}
+.exercise-actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.link-title{display:block;width:100%;min-height:44px;padding:8px 0;background:transparent;color:var(--ink);text-align:left;font-size:17px;font-weight:800;overflow-wrap:anywhere}.exercise-meta{margin-top:5px;color:var(--grass);font-size:13px;font-weight:700}
+.field{display:block;margin-bottom:18px}.field>span,.label{display:block;margin:0 0 7px;color:var(--muted);font-size:13px;font-weight:780}
+.field input,.field textarea,.field select{display:block;width:100%;min-height:50px;padding:13px;border:1px solid var(--field-border);border-radius:var(--r-sm);background:var(--field);color:var(--ink);outline-offset:2px}.field textarea{min-height:96px;resize:vertical}
+.check-item,.switch-row{display:flex;align-items:center;gap:9px;min-height:48px;padding:9px 11px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--surface);font-size:14px}.check-item input,.switch-row input{width:20px;height:20px;accent-color:var(--grass)}
+.context-row{display:flex;justify-content:space-between;align-items:center;gap:9px;margin:0 0 20px}.create-inline{min-height:44px;padding:7px 2px;margin:-8px 0 5px;background:transparent;color:var(--grass);font-size:13px;font-weight:780}.form-separator{height:1px;background:var(--line);margin:13px 0 22px}.result-label{margin-bottom:9px}
+.results{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.result-btn{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:5px;min-height:86px;padding:8px 3px;border:2px solid transparent;border-radius:var(--r-md);background:var(--quiet-surface);color:var(--muted);font-size:12px;font-weight:760;line-height:1.25}.result-btn .emoji{font-size:23px}
+.result-btn[data-result="good"].chosen{border-color:var(--grass);background:var(--grass-soft);color:var(--grass-dark)}.result-btn[data-result="mid"].chosen{border-color:var(--amber);background:var(--amber-soft);color:var(--amber-ink)}.result-btn[data-result="bad"].chosen{border-color:var(--brick);background:var(--brick-soft);color:var(--brick)}
+.save-record{min-height:52px}.delete-record{width:100%;min-height:48px;margin-top:10px;background:transparent;color:var(--brick);font-size:13px;font-weight:720}
+.overlay{position:fixed;z-index:30;inset:0;display:flex;align-items:flex-end;justify-content:center;padding:12px 0 0;background:var(--overlay);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);animation:veil-in .16s ease-out}
+.sheet{width:100%;max-width:620px;max-height:92dvh;overflow:auto;overscroll-behavior:contain;padding:23px 20px calc(28px + env(safe-area-inset-bottom));border-radius:28px 28px 0 0;background:var(--white);box-shadow:var(--shadow-high);animation:sheet-up .2s ease-out}
+.sheet:before{content:"";display:block;width:38px;height:4px;margin:-9px auto 17px;border-radius:4px;background:var(--line)}.sheet-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px}.sheet h2{font-size:24px;overflow-wrap:anywhere}.sheet .close{width:44px;height:44px;min-width:44px;border-radius:50%;background:var(--grass-soft);color:var(--grass-dark);font-size:22px}
+.calendar-card{padding:14px 12px;border-radius:var(--r-lg);box-shadow:var(--shadow-low)}.calendar-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding:2px 6px 8px}.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.dow{text-align:center;font-size:11px;color:var(--muted);font-weight:800;padding:6px 0}.day{position:relative;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;aspect-ratio:1;min-height:39px;border-radius:50%;background:transparent;color:var(--ink);font-size:14px;font-weight:700}.day.today{box-shadow:inset 0 0 0 2px var(--ball)}.day.selected{background:var(--grass);color:var(--on-dark)}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--dot)}.dot.good{background:var(--grass)}.dot.mid{background:var(--amber)}.dot.rest{background:var(--rest)}.dot.walk{background:var(--ball);box-shadow:0 0 0 1px var(--grass)}.day.selected .dot{background:var(--on-dark)}
+.legend{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:11px;margin-top:14px}.legend span{display:inline-flex;align-items:center;gap:5px}
+.filters{display:flex;gap:5px;padding:5px;border-radius:var(--r-md);background:var(--neutral)}.filters button{flex:1;min-height:44px;padding:6px 4px;border-radius:11px;background:transparent;color:var(--muted);font-size:13px;font-weight:760}.filters button.active{background:var(--white);color:var(--grass-dark);box-shadow:var(--shadow-low)}
+.stats-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.simple-stats{margin-top:16px}.metric{padding:18px;border-radius:var(--r-md);background:var(--ink);color:var(--on-dark)}.metric:nth-child(2){background:var(--grass)}.metric .muted{color:var(--on-dark-soft)}.metric .val{margin-top:7px;font-size:34px;line-height:1;font-weight:820;color:var(--ball)}
+.chart{display:block;width:100%;max-width:100%;height:auto;max-height:220px;overflow:visible}.chart text{font-family:var(--font);fill:var(--chart-text);font-size:11px}.chart .bar{fill:var(--grass)}.chart-grid{stroke:var(--line)}.chart-main{stroke:var(--grass)}.chart-average{stroke:var(--amber)}.chart-good{fill:var(--grass);color:var(--grass)}.chart-mid{fill:var(--amber);color:var(--amber)}.chart-bad{fill:var(--brick);color:var(--brick)}.chart-ring{stroke:var(--line)}.chart-total{fill:var(--ink)}.color-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}.color-dot.chart-good{background:var(--grass)}.color-dot.chart-mid{background:var(--amber)}.color-dot.chart-bad{background:var(--brick)}
+.ranking-card{padding:16px 18px}.ranking-item{padding:7px 0 11px}.ranking-item .row{margin-bottom:8px}.ranking-track{height:8px;border-radius:8px;overflow:hidden;background:var(--track)}.ranking-track i{display:block;height:100%;min-width:4px;border-radius:8px;background:var(--grass)}
+.history-item{width:100%;display:flex;align-items:center;gap:10px;min-height:58px;padding:13px 0;border-bottom:1px solid var(--line);background:transparent;color:var(--ink);text-align:left}.history-item .grow{display:flex;flex-direction:column;gap:5px}.history-item .grow strong{font-size:13px}.history-item .grow .subtle{overflow-wrap:anywhere}
+.divider-title{margin:18px 0 6px;color:var(--muted);font-size:13px;font-weight:780}.trainer-summary-action{margin-top:12px;border:1px solid var(--grass)}
+.report-options{display:grid;gap:11px;margin-bottom:16px}.custom-dates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.report-preview{min-height:260px!important;line-height:1.48;white-space:pre-wrap}.report-error{margin:-6px 0 14px;color:var(--brick);font-size:13px;font-weight:700}
+.backup-summary{margin-top:16px;background:var(--grass-soft)}
+.toast{position:fixed;z-index:45;left:50%;bottom:calc(88px + env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;align-items:center;justify-content:space-between;gap:12px;width:min(92%,470px);padding:13px 15px;border-radius:var(--r-md);background:var(--ink);color:var(--on-dark);box-shadow:var(--shadow-high);font-size:14px}.toast button{flex-shrink:0;min-height:44px;padding:0 12px;border-radius:9px;background:var(--grass-dark);color:var(--on-dark);font-weight:780}
+.toast.good-save:before{content:"";width:14px;height:14px;flex:0 0 14px;border-radius:50%;background:var(--ball);animation:clicker-pop .45s ease-out}
+.nav{position:fixed;z-index:15;left:0;right:0;bottom:0;padding:8px max(9px,env(safe-area-inset-right)) calc(7px + env(safe-area-inset-bottom)) max(9px,env(safe-area-inset-left));border-top:1px solid var(--line);background:var(--nav-bg);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}.nav-inner{max-width:700px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:2px}
+.nav-item{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:58px;border-radius:var(--r-sm);background:transparent;color:var(--muted);font-size:10px;font-weight:720}.nav-item.active{color:var(--grass-dark)}.nav-item.active:after{content:"";position:absolute;bottom:3px;width:18px;height:4px;border-radius:4px;background:var(--ball)}.nav-item svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.nav-item span{white-space:nowrap}
+.settings-group{scroll-margin-top:16px}.theme-seg{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:5px;border-radius:var(--r-md);background:var(--neutral)}.theme-seg button{min-height:44px;border-radius:11px;background:transparent;color:var(--muted);font-weight:760}.theme-seg button.on{background:var(--white);color:var(--grass-dark);box-shadow:var(--shadow-low)}.about-body{text-align:center}.about-logo{width:72px;height:72px;margin:0 auto 14px}.about-body h2{font-size:27px}.about-description{max-width:360px;margin:8px auto 0;color:var(--muted)}.about-version{margin-top:8px;color:var(--muted);font-size:13px}.about-divider{height:1px;margin:20px 0 16px;background:var(--line)}.author-signature{color:var(--author-text);font:700 10pt/1.2 "Segoe UI",system-ui,sans-serif;text-align:center}.copyright-signature{margin-top:3px;color:var(--copyright-text);font:400 8pt/1.2 "Segoe UI",system-ui,sans-serif;text-align:center}.about-actions{margin-top:19px}
+.today-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 22px}.today-actions button{min-height:58px}.quick-row{display:flex;gap:7px;overflow:auto;padding:2px 0 10px;scrollbar-width:none}.quick-row::-webkit-scrollbar{display:none}.quick-chip,.exercise-chip{min-height:46px;padding:10px 14px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink);font-weight:760;white-space:nowrap}.exercise-chip.chosen{border-color:var(--grass);background:var(--ball-soft);color:var(--grass-dark)}.chip-grid{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.popular-label{width:100%;font-size:12px;color:var(--muted);font-weight:780;margin:3px 0 -1px}.stepper{display:grid;grid-template-columns:56px 1fr 56px;align-items:center;gap:8px;margin-bottom:12px}.stepper button{height:54px;border-radius:var(--r-md);background:var(--grass-soft);color:var(--grass-dark);font-size:28px}.stepper-output{text-align:center}.stepper-output strong{display:block;font-size:27px}.stepper-output span{font-size:12px;color:var(--muted)}.counter-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}.full-screen{position:fixed;inset:0;z-index:60;overflow:auto;background:var(--ink);color:var(--on-dark);padding:calc(18px + env(safe-area-inset-top)) 18px calc(24px + env(safe-area-inset-bottom));animation:screen-in .2s ease-out}.full-screen-inner{width:min(100%,680px);min-height:100%;margin:auto;display:flex;flex-direction:column}.mode-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.mode-head .quiet{color:var(--on-dark-soft)}.mode-title{margin:34px 0 8px;color:var(--profile-soft);font-size:14px}.mode-exercise{font-size:34px;line-height:1.08}.live-score{margin:22px 0 14px;font-size:64px;line-height:1;font-weight:850;color:var(--ball)}.live-meta{color:var(--profile-soft)}.giant-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:26px 0 14px}.giant-actions button{min-height:142px;border-radius:26px;font-size:46px;font-weight:850}.giant-good{background:var(--ball);color:var(--ink)}.giant-bad{background:var(--brick);color:var(--on-dark)}.mode-secondary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:auto}.mode-secondary button{min-height:54px}.mode-select{margin:18px 0}.mode-select .exercise-chip{background:transparent;color:var(--on-dark);border-color:var(--muted)}.mode-select .exercise-chip.chosen{background:var(--ball);color:var(--ink);border-color:var(--ball)}.timer{font-size:52px;line-height:1;font-weight:850;color:var(--ball);margin:20px 0}.walk-controls{display:grid;gap:10px}.walk-exercise{display:grid;grid-template-columns:1fr 62px 62px;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--muted)}.walk-exercise button{height:56px;border-radius:16px;font-size:25px;font-weight:850}.walk-exercise .good{background:var(--ball);color:var(--ink)}.walk-exercise .bad{background:var(--brick);color:var(--on-dark)}.walk-tools{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0}.walk-tools button{min-height:58px}.encounter-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.encounter-grid button{min-height:58px}.summary-row{padding:15px 0;border-bottom:1px solid var(--line)}.trend{font-size:12px;font-weight:800}.trend.up{color:var(--grass)}.trend.down{color:var(--brick)}.walk-card{border-left:4px solid var(--ball)}.walk-dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--ball);box-shadow:0 0 0 2px var(--grass);margin-right:7px}.place-filter{margin-top:10px}.sync-banner{margin-bottom:16px}.session-summary .field{margin-top:12px}
+@keyframes screen-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes veil-in{from{opacity:0}to{opacity:1}}@keyframes sheet-up{from{transform:translateY(18px)}to{transform:translateY(0)}}@keyframes clicker-pop{0%{transform:scale(.4)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
+@media(min-width:680px){.wrap{padding-left:28px;padding-right:28px}.overlay{align-items:center;padding:20px}.sheet{border-radius:28px;max-height:88dvh;padding-bottom:27px}.sheet:before{display:none}}
+@media(max-width:365px){.wrap{padding-left:13px;padding-right:13px}.today-profile{padding:15px 13px;gap:10px}.avatar{width:56px;height:56px;flex-basis:56px}.today-profile h1{font-size:24px}.day-count{min-width:54px;padding:8px 5px}.diary-session{padding-left:52px}.sessions-stack:before{left:21px}.session-emoji{width:44px;height:44px}.diary-entry{gap:7px}.diary-entry .pill{font-size:10px;padding:5px 6px}.nav-item span{font-size:9px}.custom-dates{grid-template-columns:1fr}.exercise-actions{flex-direction:column}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#101713;--surface:#17221C;--white:#1B2821;--ink:#EEF4EF;--muted:#A9BBB0;--line:#34483C;--grass:#6BA985;--grass-dark:#BCE1C9;--grass-soft:#253E30;--ball:#DCEB62;--ball-soft:#38431F;--amber:#E2AE50;--amber-soft:#40321A;--amber-ink:#F2CF8A;--brick:#E27B72;--brick-soft:#472725;--rest:#AAA0D7;--rest-soft:#312E45;--field:#111A15;--field-border:#465C4E;--quiet-surface:#253229;--neutral:#26352C;--track:#34483C;--nav-bg:rgba(16,23,19,.95);--overlay:rgba(0,0,0,.66);--on-dark:#FFF;--on-dark-soft:#D3DED7;--profile-soft:#C9D8CF;--profile-faint:#DDE7E1;--chart-text:#B4C4BA;--dot:#65786C;--arrow:#A9BBB0;--focus:#DCEB62;--profile-shadow:0 10px 28px rgba(0,0,0,.32);--shadow-low:0 3px 12px rgba(0,0,0,.25);--shadow-high:0 18px 50px rgba(0,0,0,.48);--author-text:#F8FAFC;--copyright-text:#64748B}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<main id="app" class="wrap" aria-live="polite"></main>
+<nav id="nav" class="nav" aria-label="Navegación principal"></nav>
+<div id="modal-root"></div>
+<div id="toast-root" aria-live="polite"></div>
+<input type="file" id="backup-picker" accept=".json,application/json" class="hide">
+<script>
+'use strict';
+(() => {
+  // DogTrainer 1.0: diario local, sin cuentas ni dependencias.
+  const KEY = 'dogtrainer_data';
+  const UI_PREFS_KEY = 'dogtrainer_ui_prefs';
+  const AUTOBACKUP_KEY = 'dogtrainer_autobackup';
+  const ACTIVE_SESSION_KEY = 'dogtrainer_active_session';
+  const ACTIVE_WALK_KEY = 'dogtrainer_active_walk';
+  const APP = 'dogtrainer';
+  const SCHEMA = 1;
+  const APP_META = {name:'DogTrainer',description:'Diario de entrenamiento, paseos y progreso de tu perro.',version:'1.1.0',author:'Edu López',copyright:'© 2026 Edu López',fileSuffix:'dog'};
+  const MARK_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#2F6B4F"/><circle cx="17" cy="25" r="7" fill="#F2F4EE"/><circle cx="29" cy="16" r="7" fill="#F2F4EE"/><circle cx="43" cy="19" r="8" fill="#D4E157"/><circle cx="49" cy="33" r="7" fill="#F2F4EE"/><path d="M19 48c0-9 6-15 13-15s13 6 13 15c0 6-5 9-13 9s-13-3-13-9Z" fill="#F2F4EE"/><path d="M38 14c4 2 7 6 8 10" fill="none" stroke="#2F6B4F" stroke-width="2.5" stroke-linecap="round"/></svg>`;
+  const SESSIONS = ['morning','noon','night'];
+  const SINFO = { morning:['☀️','Mañana'], noon:['🌤️','Mediodía'], night:['🌙','Noche'] };
+  const RESULTS = { good:['🟢','Muy bien'], mid:['🟡','Regular'], bad:['🔴','Necesita mejorar'] };
+  const PLACES = {casa:'Casa',jardin:'Jardín',parque:'Parque',calle:'Calle',otro:'Otro'};
+  const ENCOUNTER_TYPES = {perro:'Perro',persona:'Persona',nino:'Niño',bici:'Bici/patinete',vehiculo:'Moto/coche',ruido:'Ruido',otro:'Otro'};
+  const REACTIONS = {green:'🟢 Tranquilo',yellow:'🟡 Alerta pero responde',red:'🔴 Reacciona'};
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const uid = () => typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : 'dt-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,12);
+  const localDate = d => [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');
+  const today = () => localDate(new Date());
+  const localTime = d => [String(d.getHours()).padStart(2,'0'),String(d.getMinutes()).padStart(2,'0')].join(':');
+  const parseDay = s => {const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d,12,0,0,0)};
+  const shiftDay = (s,n) => {const d=parseDay(s);d.setDate(d.getDate()+n);return localDate(d)};
+  const humanDate = (s,opts={weekday:'long',day:'numeric',month:'long'}) => new Intl.DateTimeFormat('es-ES',opts).format(parseDay(s));
+  const cap = s => s ? s[0].toUpperCase()+s.slice(1) : '';
+  const clone = x => JSON.parse(JSON.stringify(x));
+  const has = (o,k) => Object.prototype.hasOwnProperty.call(o,k);
+  const arr = Array.isArray;
+  const navInfo = [['today','Hoy','home'],['exercises','Ejercicios','list'],['history','Historial','calendar'],['progress','Progreso','chart'],['settings','Ajustes','settings']];
+  const icons = {
+    home:'<path d="m3 10 9-7 9 7v 10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
+    list:'<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M8 9h9M8 14h9"/>',
+    calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/>',
+    chart:'<path d="M4 20V 10m5 10V 5m5 15v-8m5 8V 3"/>',
+    settings:'<path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/><path d="M19 13.5c.1-.5.1-1.5 0-2l2-1.5-2-3.5-2.3.9a8 8 0 0 0-1.7-1L14.6 4h-5.2L9 6.4a8 8 0 0 0-1.7 1L5 6.5 3 10l2 1.5a9 9 0 0 0 0 2L3 15l2 3.5 2.3-.9a8 8 0 0 0 1.7 1l.4 2.4h5.2l.4-2.4a8 8 0 0 0 1.7-1l2.3.9 2-3.5z"/>'
+  };
+  const svgIcon = n => `<svg viewBox="0 0 24 24" aria-hidden="true">${icons[n]}</svg>`;
+  const app=$('app'), nav=$('nav'), modalRoot=$('modal-root'), toastRoot=$('toast-root');
+  let state, broken=null, tab='today', selectedDay=today(), month=today().slice(0,7);
+  let filter='30', progressId='', progressPlace='', transientResult='', toastTimer=null, undo=null;
+  let pendingImport=null,newExerciseContext=null,previousFocus=null;
+  let reportEdited=false,reportLastGenerated='';
+  let recordChoice='',modalDirty=false,pendingExternalData=null,wakeLock=null,walkTimer=null;
+  let renderIndex={recordsByDate:new Map(),recordsByExercise:new Map(),walksByDate:new Map()};
+  let uiPrefs=loadUiPrefs(), waitingServiceWorker=null, globalErrorAt=0;
+  let storageInfo={persistent:null,usage:null,quota:null,supported:!!navigator.storage&&location.protocol!=='file:'};
+
+  function loadUiPrefs(){
+    try{
+      const raw=localStorage.getItem(UI_PREFS_KEY);
+      if(raw===null)localStorage.setItem(UI_PREFS_KEY,'{}');
+      const value=JSON.parse(raw||'{}');
+      return value&&typeof value==='object'&&!arr(value)?value:{};
+    }catch(_){return {};}
+  }
+  function saveUiPrefs(){
+    try{localStorage.setItem(UI_PREFS_KEY,JSON.stringify(uiPrefs));}
+    catch(err){console.warn('DogTrainer: no se han guardado las preferencias de interfaz',err);}
+  }
+  const darkMQ=window.matchMedia?.('(prefers-color-scheme: dark)');
+  function effectiveTheme(){return uiPrefs.theme==='dark'||(uiPrefs.theme!=='light'&&darkMQ?.matches)?'dark':'light';}
+  function applyTheme(){const theme=effectiveTheme();document.documentElement.dataset.theme=theme;$('theme-color-meta')?.setAttribute('content',theme==='dark'?'#101713':'#F2F4EE');}
+  const isStandalone=()=>navigator.standalone===true||window.matchMedia?.('(display-mode: standalone)').matches===true;
+  const prefActive=name=>Number.isFinite(uiPrefs[name])&&uiPrefs[name]>Date.now();
+
+  // 1. Modelo único y validación estricta.
+  function seed(){
+    const defs = [
+      ['Sentado','Sentarse a petición de forma relajada.'],
+      ['Mira','Ofrecer contacto visual voluntario.'],
+      ['Luring','Seguir una guía de comida o mano con calma.'],
+      ['Posicionamiento base','Trabajar la colocación y orientación corporal.'],
+      ['Bozal','Crear una asociación voluntaria y positiva con el bozal.'],
+      ['Manipulación','Practicar contacto y revisión corporal de forma tranquila.'],
+      ['Paseo sin tirar','Caminar con la correa relajada.'],
+      ['Llamada','Volver al escuchar la señal.'],
+      ['Déjalo','Apartarse de algo al escuchar la señal.'],
+      ['Sentado en cruce','Esperar sentado antes de cruzar.'],
+      ['Junto','Caminar cerca y coordinado.']
+    ];
+    const exercises=defs.map(([name,description])=>({id:uid(),name,description,archived:false}));
+    const walkNames=new Set(['Mira','Paseo sin tirar','Llamada','Déjalo','Sentado en cruce','Junto']);
+    return {
+      appId:APP,schemaVersion:SCHEMA,
+      profile:{name:''},settings:{lastExportDate:'',walkExerciseIds:exercises.filter(e=>walkNames.has(e.name)).map(e=>e.id)},
+      exercises,records:[],notes:[],rests:[],walks:[]
+    };
+  }
+  function invalid(m){throw new Error(m)}
+  const dateOK = s => typeof s==='string' && /^\d{4}-\d\d-\d\d$/.test(s) && localDate(parseDay(s))===s;
+  const str = (s,max,required=false) => typeof s==='string' && s.length<=max && (!required||!!s.trim());
+  const idOK = s => str(s,110,true) && /^[a-zA-Z0-9_-]+$/.test(s);
+  const timeOK = s => typeof s==='string' && /^([01]\d|2[0-3]):[0-5]\d$/.test(s);
+  const onlyKeys=(o,allowed)=>o&&Object.keys(o).every(k=>allowed.includes(k));
+  function validate(d){
+    if(!d||typeof d!=='object'||arr(d)||d.appId!==APP||d.schemaVersion!==SCHEMA||!onlyKeys(d,['appId','schemaVersion','profile','settings','exercises','records','notes','rests','walks']))invalid('La copia no corresponde a DogTrainer 1.0.');
+    if(!d.profile||!onlyKeys(d.profile,['name'])||!str(d.profile.name,100))invalid('Perfil inválido.');
+    if(!d.settings||!onlyKeys(d.settings,['lastExportDate','walkExerciseIds'])||!str(d.settings.lastExportDate,40)||!arr(d.settings.walkExerciseIds)||new Set(d.settings.walkExerciseIds).size!==d.settings.walkExerciseIds.length)invalid('Ajustes inválidos.');
+    if(!arr(d.exercises)||d.exercises.length>1500||!arr(d.records)||d.records.length>100000||
+       !arr(d.notes)||d.notes.length>20000||!arr(d.rests)||d.rests.length>30000||!arr(d.walks)||d.walks.length>20000)invalid('Estructura o tamaño de datos inválidos.');
+    const exIds=new Set(),walkIds=new Set(),recordIds=new Set(),noteIds=new Set();
+    for(const e of d.exercises){
+      if(!e||!onlyKeys(e,['id','name','description','archived'])||!idOK(e.id)||exIds.has(e.id)||!str(e.name,140,true)||!str(e.description,2000)||typeof e.archived!=='boolean')invalid('Ejercicio inválido o duplicado.');
+      exIds.add(e.id);
+    }
+    if(d.settings.walkExerciseIds.some(id=>!exIds.has(id)))invalid('Los ejercicios del paseo no existen.');
+    for(const w of d.walks){
+      if(!w||!onlyKeys(w,['id','date','startTime','endTime','durationMin','route','notes','sniffMin','encounters'])||!idOK(w.id)||walkIds.has(w.id)||!dateOK(w.date)||w.date>today()||!timeOK(w.startTime)||!timeOK(w.endTime)||
+         !Number.isInteger(w.durationMin)||w.durationMin<0||w.durationMin>1440||!str(w.route,180)||!str(w.notes,4000)||
+         !Number.isInteger(w.sniffMin)||w.sniffMin<0||w.sniffMin>1440||!arr(w.encounters)||w.encounters.length>500)invalid('Paseo inválido.');
+      const encounterIds=new Set();
+      for(const e of w.encounters){
+        if(!e||!onlyKeys(e,['id','time','type','reaction','distance','note'])||!idOK(e.id)||encounterIds.has(e.id)||!timeOK(e.time)||!has(ENCOUNTER_TYPES,e.type)||!has(REACTIONS,e.reaction)||
+           !['','2','5','10','20','30+'].includes(e.distance)||!str(e.note,500))invalid('Encuentro de paseo inválido.');
+        encounterIds.add(e.id);
+      }
+      walkIds.add(w.id);
+    }
+    for(const r of d.records){
+      if(!r||!onlyKeys(r,['id','date','time','exerciseId','exerciseName','session','result','observations','attempts','successes','criterion','place','walkId'])||!idOK(r.id)||recordIds.has(r.id)||!dateOK(r.date)||!timeOK(r.time)||
+         !idOK(r.exerciseId)||!exIds.has(r.exerciseId)||!str(r.exerciseName,140,true)||
+         !SESSIONS.includes(r.session)||!has(RESULTS,r.result)||!str(r.observations,6000))invalid('Registro de entrenamiento inválido.');
+      const hasAttempts=has(r,'attempts'),hasSuccesses=has(r,'successes');
+      if(hasAttempts!==hasSuccesses||(hasAttempts&&(!Number.isInteger(r.attempts)||r.attempts<1||r.attempts>500||!Number.isInteger(r.successes)||r.successes<0||r.successes>r.attempts)))invalid('Contadores del registro inválidos.');
+      if(has(r,'criterion')&&!str(r.criterion,140)||has(r,'place')&&!has(PLACES,r.place)||has(r,'walkId')&&(!idOK(r.walkId)||!walkIds.has(r.walkId)))invalid('Detalles del registro inválidos.');
+      recordIds.add(r.id);
+    }
+    for(const n of d.notes){
+      if(!n||!onlyKeys(n,['id','date','time','text'])||!idOK(n.id)||noteIds.has(n.id)||!dateOK(n.date)||n.date>today()||!timeOK(n.time)||!str(n.text,6000,true))invalid('Nota inválida.');
+      noteIds.add(n.id);
+    }
+    if(new Set(d.rests).size!==d.rests.length||d.rests.some(s=>!dateOK(s)))invalid('Días de descanso inválidos.');
+    return true;
+  }
+
+  // 2. Persistencia transaccional: validar → almacenar → actualizar estado.
+  function persist(next){validate(next);localStorage.setItem(KEY,JSON.stringify(next));state=next;}
+  function commit(update,success){
+    try{
+      const next=clone(pendingExternalData||state);update(next);persist(next);pendingExternalData=null;render();
+      if(success)toast(success);return true;
+    }catch(err){
+      console.error('DogTrainer: fallo de guardado',err);
+      toast('No se ha guardado: '+(err.name==='QuotaExceededError'?'almacenamiento lleno. Exporta una copia y libera espacio.':err.message),false,true);
+      return false;
+    }
+  }
+  function initStore(){
+    try{
+      const current=localStorage.getItem(KEY);
+      if(current!==null){const d=JSON.parse(current),changed=removeRetiredProfileFields(d);validate(d);if(changed)persist(d);else state=d;return;}
+      persist(seed());
+    }catch(err){
+      console.error('DogTrainer: no se han podido cargar los datos',err);
+      broken={reason:err.message};
+    }
+  }
+  function removeRetiredProfileFields(data){if(data?.profile&&has(data.profile,'birthDate')){delete data.profile.birthDate;return true;}return false;}
+  const findEx=(id,d=state)=>d.exercises.find(e=>e.id===id);
+  const findRecord=(id,d=state)=>d.records.find(r=>r.id===id);
+  const sessionRecords=(date,session)=>(renderIndex.recordsByDate.get(date)||[]).filter(r=>r.session===session).slice().sort((a,b)=>a.time.localeCompare(b.time));
+  const recordsInRange=(exId='')=>{const n=filter==='7'?7:filter==='30'?30:filter==='90'?90:null;const min=n?shiftDay(today(),1-n):null;const source=exId?(renderIndex.recordsByExercise.get(exId)||[]):state.records;return source.filter(r=>(!min||r.date>=min)&&r.date<=today()&&(!progressPlace||r.place===progressPlace));};
+  const daysInRange=()=>{const n=filter==='7'?7:filter==='30'?30:filter==='90'?90:null;return n?shiftDay(today(),1-n):null;};
+  const formatResult=r=>has(RESULTS,r)?RESULTS[r][0]+' '+RESULTS[r][1]:'';
+  function buildRenderIndexes(){
+    const recordsByDate=new Map(),recordsByExercise=new Map(),walksByDate=new Map();
+    state.records.forEach(r=>{if(!recordsByDate.has(r.date))recordsByDate.set(r.date,[]);recordsByDate.get(r.date).push(r);if(!recordsByExercise.has(r.exerciseId))recordsByExercise.set(r.exerciseId,[]);recordsByExercise.get(r.exerciseId).push(r);});
+    state.walks.forEach(w=>{if(!walksByDate.has(w.date))walksByDate.set(w.date,[]);walksByDate.get(w.date).push(w);});
+    renderIndex={recordsByDate,recordsByExercise,walksByDate};
+  }
+
+  // 4. Componentes reutilizados y rediseñados.
+  function toast(msg,button=false,isError=false,celebrate=false){
+    clearTimeout(toastTimer);
+    let action='';
+    if(button===true)action='<button type="button" data-act="undo">Deshacer</button>';
+    else if(button&&typeof button==='object')action=`<button type="button" data-act="${esc(button.act)}">${esc(button.label)}</button>`;
+    toastRoot.innerHTML=`<div class="toast ${celebrate?'good-save':''}" role="status"><span>${esc(msg)}</span>${action}</div>`;
+    toastTimer=setTimeout(()=>{toastRoot.innerHTML='';undo=null},isError?7000:button&&button!==true?12000:4600);
+  }
+  function showModal(html){
+    previousFocus=document.activeElement;modalDirty=false;
+    modalRoot.innerHTML=`<div class="overlay" data-overlay="true"><section class="sheet" role="dialog" aria-modal="true" aria-label="Panel de DogTrainer">${html}</section></div>`;
+    document.body.style.overflow='hidden';
+    const el=modalRoot.querySelector('input:not([type=hidden]),select,textarea,button');
+    if(el)requestAnimationFrame(()=>{try{el.focus({preventScroll:true});}catch(_){}});
+  }
+  function closeModal(){
+    modalRoot.innerHTML='';document.body.style.overflow='';transientResult='';recordChoice='';pendingImport=null;newExerciseContext=null;modalDirty=false;
+    reportEdited=false;reportLastGenerated='';
+    if(previousFocus?.isConnected)previousFocus.focus({preventScroll:true});
+    previousFocus=null;
+    if(pendingExternalData){state=pendingExternalData;pendingExternalData=null;broken=null;render();toast('Datos actualizados desde otra ventana');}
+  }
+  const modalHeader=title=>`<div class="sheet-head"><h2>${esc(title)}</h2><button type="button" class="close" data-act="close" aria-label="Cerrar">×</button></div>`;
+  const empty=(msg,symbol='')=>`<div class="empty">${symbol?`<span class="symbol">${symbol}</span>`:''}${esc(msg)}</div>`;
+  const avatar=()=>{const initial=(state.profile.name.trim()[0]||'D').toLocaleUpperCase('es');return `<div class="avatar">${esc(initial)}</div>`;};
+  const brandMark=()=>`<span class="page-mark" aria-hidden="true">${MARK_SVG}</span>`;
+  function parseExportDate(value){
+    const match=typeof value==='string'&&/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})$/.exec(value);
+    if(!match)return null;
+    const [,ys,ms,ds,hs,mins]=match,[y,m,d,h,min]=[ys,ms,ds,hs,mins].map(Number);
+    const parsed=new Date(y,m-1,d,h,min,0,0);
+    return localDate(parsed)===`${ys}-${ms}-${ds}`&&localTime(parsed)===`${hs}:${mins}`?parsed:null;
+  }
+  function installCard(){
+    if(isStandalone()||prefActive('installDismissedUntil'))return '';
+    return `<div class="card install-card"><div class="card-head"><h3>Instala DogTrainer en tu iPhone</h3><button class="quiet" type="button" data-act="dismiss-install" aria-label="Ocultar este aviso">×</button></div><p class="muted small" style="margin-top:9px">En Safari, pulsa Compartir → «Añadir a pantalla de inicio». Abrirla desde allí evita que Safari borre tus datos.</p></div>`;
+  }
+  function backupReminder(){
+    if(!state.records.length||prefActive('backupSnoozedUntil'))return '';
+    const last=parseExportDate(state.settings.lastExportDate);
+    if(last&&Date.now()-last.getTime()<=14*86400000)return '';
+    return `<div class="notice"><strong>Conviene guardar una copia</strong><p style="margin-top:5px">Tienes entrenamientos sin una copia reciente.</p><div class="actions"><button class="primary" type="button" data-act="export">Exportar ahora</button><button class="secondary" type="button" data-act="snooze-backup">Recordar en 3 días</button></div></div>`;
+  }
+  const formatBytes=value=>{if(!Number.isFinite(value))return 'No disponible';if(value<1024)return `${Math.round(value)} B`;if(value<1048576)return `${(value/1024).toFixed(1)} KB`;return `${(value/1048576).toFixed(1)} MB`;};
+  function storageCard(){
+    const chars=JSON.stringify(state).length,sizeKB=chars/1024;
+    const persistent=storageInfo.persistent===true?'Sí':storageInfo.persistent===false?'No':storageInfo.supported?'Comprobando…':'No disponible';
+    const estimate=Number.isFinite(storageInfo.usage)?`${formatBytes(storageInfo.usage)}${Number.isFinite(storageInfo.quota)?` de ${formatBytes(storageInfo.quota)}`:''}`:'No disponible';
+    return `<div class="section-bar"><h2>Estado del almacenamiento</h2></div><div class="card"><div class="list-item"><div class="grow"><strong>Almacenamiento persistente</strong><div class="desc">${persistent}</div></div></div><div class="list-item"><div class="grow"><strong>Tamaño de los datos</strong><div class="desc">${sizeKB.toFixed(1)} KB</div></div></div><div class="list-item"><div class="grow"><strong>Uso estimado del sitio</strong><div class="desc">${estimate}</div></div></div>${chars>4*1024*1024?'<div class="notice">Los datos superan 4 MB. Exporta una copia para proteger el historial y revisa si necesitas conservar todos los registros.</div>':''}</div>`;
+  }
+  function readAutoBackup(){
+    try{
+      const raw=localStorage.getItem(AUTOBACKUP_KEY);if(raw===null)return null;
+      const value=JSON.parse(raw);
+      if(!value||typeof value!=='object'||typeof value.savedAt!=='string'||typeof value.reason!=='string'||!value.data)return {invalid:true};
+      return value;
+    }catch(_){return {invalid:true};}
+  }
+  function autoBackupCard(){
+    const backup=readAutoBackup();if(!backup)return '';
+    if(backup.invalid)return `<div class="notice">La copia automática guardada no se puede leer.</div>`;
+    const saved=new Date(backup.savedAt),label=Number.isNaN(saved.getTime())?backup.savedAt:new Intl.DateTimeFormat('es-ES',{dateStyle:'medium',timeStyle:'short'}).format(saved);
+    return `<div class="hint-box"><strong>Copia automática del ${esc(label)} (${esc(backup.reason)})</strong><div class="actions"><button class="secondary" type="button" data-act="restore-autobackup">Restaurar</button><button class="secondary" type="button" data-act="download-autobackup">Descargar</button></div></div>`;
+  }
+  function lastPracticeDate(exerciseId){
+    return (renderIndex.recordsByExercise.get(exerciseId)||[]).filter(r=>r.date<=today()).reduce((latest,r)=>r.date>latest?r.date:latest,'');
+  }
+  const dayDistance=(from,to=today())=>Math.max(0,Math.round((parseDay(to)-parseDay(from))/86400000));
+  function lastPracticeLabel(date,prefix=true){
+    if(!date)return prefix?'Última vez: aún sin practicar':'aún sin practicar';
+    if(date===today())return prefix?'Última vez: hoy':'hoy';
+    if(date===shiftDay(today(),-1))return prefix?'Última vez: ayer':'ayer';
+    const days=dayDistance(date);return prefix?`Última vez: hace ${days} días`:`hace ${days} días`;
+  }
+  function currentSession(){const hour=new Date().getHours();return hour<12?'morning':hour<17?'noon':'night';}
+  function renderHeader(){
+    const headings={exercises:'Ejercicios',history:'Historial',progress:'Progreso',settings:'Ajustes'};
+    if(tab==='today'){
+      const count=(renderIndex.recordsByDate.get(today())||[]).length,name=state.profile.name.trim()||'Tu perro';
+      return `<header class="topline today-profile">${avatar()}<div class="grow"><p class="head-sub">DogTrainer</p><h1>${esc(name)}</h1><p class="date">${cap(humanDate(today()))}</p></div><div class="day-count" aria-label="${count} entrenamientos hoy"><strong>${count}</strong><span>${count===1?'registro':'registros'}</span></div></header>`;
+    }
+    const subtitles={exercises:'Tu catálogo de práctica',history:'Consulta cada día',progress:'Revisa la evolución',settings:'Perfil, copias y preferencias'};
+    return `<header class="topline">${brandMark()}<div class="grow"><h1>${headings[tab]}</h1><p class="head-sub">${subtitles[tab]}</p><p class="date">${cap(humanDate(tab==='history'?selectedDay:today()))}</p></div></header>`;
+  }
+  function render(){
+    if(broken){renderBroken();return;}
+    if(!state)return;
+    const active=document.activeElement,focusKey=active?.dataset?.act?{act:active.dataset.act,id:active.dataset.id||'',dir:active.dataset.dir||'',tab:active.dataset.tab||''}:null;
+    buildRenderIndexes();
+    app.innerHTML=renderHeader()+
+      ({today:renderToday,exercises:renderExercises,history:renderHistory,progress:renderProgress,settings:renderSettings}[tab])();
+    nav.innerHTML=`<div class="nav-inner">${navInfo.map(([id,name,ic])=>`<button type="button" class="nav-item ${tab===id?'active':''}" aria-current="${tab===id?'page':'false'}" data-act="nav" data-tab="${id}">${svgIcon(ic)}<span>${name}</span></button>`).join('')}</div>`;
+    if(focusKey)requestAnimationFrame(()=>{const candidates=[...document.querySelectorAll('[data-act]')].filter(el=>el.dataset.act===focusKey.act);const match=candidates.find(el=>(el.dataset.id||'')===focusKey.id&&(el.dataset.dir||'')===focusKey.dir&&(el.dataset.tab||'')===focusKey.tab);try{match?.focus({preventScroll:true});}catch(_){}});
+  }
+  function renderBroken(){
+    nav.innerHTML='';
+    app.innerHTML=`<div class="card" style="margin-top:36px"><h1>⚠️ No se han cargado los datos</h1><p style="margin:15px 0">Los datos locales no se han modificado. Puedes guardar el contenido bruto antes de decidir qué hacer.</p><div class="notice">${esc(broken.reason)}</div><div class="actions"><button class="secondary" data-act="raw-export">Guardar datos actuales</button><button class="primary" data-act="import-pick">Importar copia JSON</button></div><button class="danger-btn full" style="margin-top:14px" data-act="reset-confirm">Reiniciar almacenamiento</button></div>`;
+  }
+
+  // 4. Hoy: acceso rápido al diario, la sesión y el paseo.
+  function readActive(key){try{const value=JSON.parse(localStorage.getItem(key)||'null');return value&&typeof value==='object'?value:null;}catch(_){return null;}}
+  function frequentExercises(session='',limit=3){
+    const min=shiftDay(today(),-29),counts=new Map();
+    state.records.forEach(r=>{if(r.date<min||r.date>today()||session&&r.session!==session)return;counts.set(r.exerciseId,(counts.get(r.exerciseId)||0)+1);});
+    return [...counts.entries()].map(([id,count])=>({exercise:findEx(id),count})).filter(x=>x.exercise&&!x.exercise.archived).sort((a,b)=>b.count-a.count||a.exercise.name.localeCompare(b.exercise.name,'es')).slice(0,limit).map(x=>x.exercise);
+  }
+  function lastRecord(){return state.records.slice().sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time))[0]||null;}
+  function renderToday(){
+    const day=today();
+    const dayNotes=state.notes.filter(n=>n.date===day).sort((a,b)=>b.time.localeCompare(a.time));
+    const walks=(renderIndex.walksByDate.get(day)||[]).slice().sort((a,b)=>b.startTime.localeCompare(a.startTime));
+    const activeSession=readActive(ACTIVE_SESSION_KEY),activeWalk=readActive(ACTIVE_WALK_KEY),last=lastRecord();
+    return `${installCard()}${backupReminder()}
+      ${pendingExternalData?'<div class="notice sync-banner">Hay cambios de otra pestaña pendientes. Termina de editar para aplicarlos.</div>':''}
+      <div class="today-actions"><button class="primary" data-act="${activeSession?'session-resume':'session-start'}">${activeSession?'▶ Continuar sesión':'▶ Empezar sesión'}</button><button class="secondary" data-act="${activeWalk?'walk-resume':'walk-start'}">${activeWalk?'🦮 Continuar paseo':'🦮 Empezar paseo'}</button></div>
+      ${last?`<button class="secondary full" style="margin-bottom:18px" data-act="repeat-last">↻ Repetir último: ${esc(last.exerciseName)}</button>`:''}
+      ${state.rests.includes(day)?'<div class="rest-strip">😴 Hoy es un día de descanso. Puedes anotar igualmente lo que quieras.</div>':''}
+      <div class="sessions-stack">${SESSIONS.map(s=>renderSession(day,s)).join('')}</div>
+      ${walks.length?`<div class="section-bar"><h2>Paseos de hoy</h2></div>${walks.map(renderWalkCard).join('')}`:''}
+      <div class="section-bar"><h2>Mis notas</h2><button class="plain-btn" data-act="note-open" data-date="${day}">+ Añadir nota</button></div>
+      <div class="card note-card">${dayNotes.length?dayNotes.map(renderNote).join(''):empty('Un espacio para apuntar lo que quieras.','📝')}</div>
+      <button class="rest-link" data-act="rest-toggle" data-date="${day}">${state.rests.includes(day)?'↩ Quitar día de descanso':'😴 Marcar hoy como día de descanso'}</button>`;
+  }
+  function resultPill(r){return `<span class="pill ${r==='good'?'good':r==='mid'?'mid':'bad'}">${esc(RESULTS[r][1])}</span>`;}
+  function renderSession(date,s){
+    const records=sessionRecords(date,s),future=date>today();
+    const quick=!future?frequentExercises(s):[];
+    return `<section class="session diary-session" aria-label="Sesión de ${SINFO[s][1]}">
+      <div class="session-heading"><span class="session-emoji" aria-hidden="true">${SINFO[s][0]}</span><div class="grow"><h3>${SINFO[s][1]}</h3><span class="muted small">${records.length?`${records.length} ${records.length===1?'entrenamiento':'entrenamientos'}`:'Sin entrenamientos registrados'}</span></div></div>
+      <div class="session-body diary-body">${records.map(r=>`<button type="button" class="diary-entry" data-act="register" data-id="${esc(r.id)}" aria-label="Editar ${esc(r.exerciseName)}: ${esc(RESULTS[r.result][1])}"><span class="entry-marker ${r.result}"></span><span class="grow entry-info"><strong>${esc(r.exerciseName)}</strong>${r.observations?`<span class="entry-note">${esc(r.observations)}</span>`:''}</span>${resultPill(r.result)}<span class="entry-arrow">›</span></button>`).join('')}
+      ${!records.length?'<div class="session-empty">Nada apuntado por aquí. Y está bien así.</div>':''}
+      ${quick.length?`<div class="quick-row" aria-label="Ejercicios frecuentes">${quick.map(e=>`<button type="button" class="quick-chip" data-act="quick-register" data-date="${date}" data-session="${s}" data-id="${esc(e.id)}">${esc(e.name)}</button>`).join('')}</div>`:''}
+      ${future?'<p class="muted small" style="padding:12px 3px">No puedes añadir registros en días futuros.</p>':`<button class="add-exercise" type="button" data-act="register" data-date="${date}" data-session="${s}"><span class="add-icon">＋</span> Añadir ejercicio</button>`}
+      </div></section>`;
+  }
+  function walkSummaryText(w){
+    const calm=w.encounters.filter(e=>e.reaction==='green').length;
+    return `${w.durationMin} min · ${w.encounters.length} ${w.encounters.length===1?'encuentro':'encuentros'}${w.encounters.length?` · ${Math.round(calm/w.encounters.length*100)}% tranquilos`:''}`;
+  }
+  function renderWalkCard(w){return `<div class="card walk-card"><div class="row between"><div class="grow"><h3><span class="walk-dot"></span>${esc(w.route||'Paseo de entrenamiento')}</h3><p class="muted small" style="margin-top:7px">${esc(w.startTime)}–${esc(w.endTime)} · ${esc(walkSummaryText(w))}</p>${w.notes?`<p class="small" style="margin-top:8px">${esc(w.notes)}</p>`:''}</div><button class="tiny-btn" data-act="walk-edit" data-id="${esc(w.id)}">Editar</button></div></div>`;}
+  function renderNote(n){return `<div class="note"><p>${esc(n.text)}</p><div class="row between small"><span class="muted">${esc(n.date)}, ${esc(n.time)}</span><button class="plain-btn small" data-act="note-open" data-id="${esc(n.id)}">Editar</button></div></div>`;}
+
+  // 6. Catálogo sencillo.
+  function renderExercises(){
+    const active=state.exercises.filter(e=>!e.archived),archived=state.exercises.filter(e=>e.archived);
+    return `<div class="section-bar first-section"><p class="muted small">Añade únicamente lo que quieras practicar.</p><button class="primary" data-act="ex-new">+ Nuevo</button></div>
+      <div class="card catalog-card">${active.length?active.map(renderExerciseRow).join(''):empty('Crea un ejercicio para empezar a practicar.')}</div>
+      ${archived.length?`<div class="section-bar"><h2>Archivados <span class="muted">(${archived.length})</span></h2></div><div class="card catalog-card">${archived.map(renderExerciseRow).join('')}</div>`:''}`;
+  }
+  function renderExerciseRow(e){
+    const n=(renderIndex.recordsByExercise.get(e.id)||[]).length;
+    const practice=e.archived?(n?`${n} ${n===1?'registro':'registros'}`:'Sin registros'):`${lastPracticeLabel(lastPracticeDate(e.id))}${n?`, ${n} ${n===1?'registro':'registros'}`:''}`;
+    return `<div class="list-item"><div class="exercise-index ${e.archived?'archived':''}" aria-hidden="true">${e.archived?'—':'•'}</div><div class="grow"><button class="link-title" data-act="ex-edit" data-id="${esc(e.id)}">${esc(e.name)}</button><div class="desc">${esc(e.description||'Sin descripción')}</div><div class="exercise-meta">${esc(practice)}</div></div><div class="exercise-actions">${e.archived?`<button class="tiny-btn" data-act="ex-archive" data-id="${esc(e.id)}">Restaurar</button>`:''}<button class="tiny-btn danger" data-act="ex-delete-confirm" data-id="${esc(e.id)}">Eliminar</button></div></div>`;
+  }
+  function exerciseModal(id=''){
+    const e=id?findEx(id):null;if(id&&!e)return toast('Ejercicio no encontrado.');
+    showModal(`${modalHeader(e?'Editar ejercicio':'Nuevo ejercicio')}<form id="exercise-form" data-id="${esc(id)}"><label class="field"><span>Nombre del ejercicio</span><input name="name" required maxlength="140" value="${esc(e?.name||'')}" placeholder="Por ejemplo: Quieto"></label><label class="field"><span>Descripción (opcional)</span><textarea name="description" maxlength="2000" placeholder="¿En qué consiste?">${esc(e?.description||'')}</textarea></label><button class="primary full" type="submit">${e?'Guardar cambios':'Crear ejercicio'}</button></form>
+      ${e?`<div class="actions"><button class="secondary" data-act="ex-archive" data-id="${esc(id)}">${e.archived?'Restaurar':'Archivar'}</button><button class="danger-btn" data-act="ex-delete-confirm" data-id="${esc(id)}">Eliminar</button></div>`:''}`);
+  }
+  function saveExercise(form){
+    const id=form.dataset.id,name=form.elements.name.value.trim(),description=form.elements.description.value.trim();
+    if(!name){toast('Introduce el nombre del ejercicio.');return;}
+    let added='';
+    const ok=commit(d=>{
+      if(id){const e=findEx(id,d);if(!e)invalid('El ejercicio ya no existe.');e.name=name;e.description=description;}
+      else{added=uid();d.exercises.push({id:added,name,description,archived:false});}
+    },id?'Ejercicio actualizado.':'Ejercicio creado.');
+    if(ok){
+      const context=newExerciseContext;closeModal();
+      if(context&&added)registerModal(context.date,context.session,'',added);
+    }
+  }
+  function archiveExercise(id){
+    const e=findEx(id);if(!e)return;
+    const ok=commit(d=>{findEx(id,d).archived=!e.archived;},e.archived?'Ejercicio restaurado.':'Ejercicio archivado.');
+    if(ok)closeModal();
+  }
+  function confirmSheet(title,msg,act,attrs='',danger='Confirmar'){
+    showModal(`${modalHeader(title)}<p style="margin:9px 0 20px;line-height:1.65">${esc(msg)}</p><div class="actions"><button class="secondary" data-act="close">Cancelar</button><button class="danger-btn" data-act="${esc(act)}" ${attrs}>${esc(danger)}</button></div>`);
+  }
+  function exDelete(id){
+    const e=findEx(id);if(!e)return;
+    const count=(renderIndex.recordsByExercise.get(id)||[]).length;
+    confirmSheet('Eliminar ejercicio',`Se eliminará «${e.name}»${count?` y sus ${count} ${count===1?'registro asociado':'registros asociados'}`:''}. Podrás deshacerlo inmediatamente.`, 'ex-delete',`data-id="${esc(id)}"`,'Eliminar ejercicio');
+  }
+  function cleanActiveExercise(id){
+    const liveSession=readActive(ACTIVE_SESSION_KEY);if(liveSession){delete liveSession.items?.[id];liveSession.history=(liveSession.history||[]).filter(x=>x.exerciseId!==id);if(liveSession.currentExerciseId===id)liveSession.currentExerciseId=state.exercises.find(e=>!e.archived)?.id||'';writeActive(ACTIVE_SESSION_KEY,liveSession);}
+    const liveWalk=readActive(ACTIVE_WALK_KEY);if(liveWalk?.counters&&has(liveWalk.counters,id)){delete liveWalk.counters[id];writeActive(ACTIVE_WALK_KEY,liveWalk);}
+  }
+  function deleteExercise(id){
+    const e=findEx(id);if(!e)return;const before=clone(e),index=state.exercises.findIndex(x=>x.id===id),records=state.records.filter(r=>r.exerciseId===id).map(clone),wasWalk=state.settings.walkExerciseIds.includes(id);
+    const ok=commit(d=>{d.exercises=d.exercises.filter(x=>x.id!==id);d.records=d.records.filter(r=>r.exerciseId!==id);d.settings.walkExerciseIds=d.settings.walkExerciseIds.filter(x=>x!==id);},'Ejercicio eliminado.');
+    if(ok){cleanActiveExercise(id);closeModal();undo=()=>commit(d=>{d.exercises.splice(Math.min(index,d.exercises.length),0,before);d.records.push(...records);if(wasWalk)d.settings.walkExerciseIds.push(id);},'Ejercicio recuperado.');toast('Ejercicio eliminado.',true);}
+  }
+
+  // 6. Registro rápido con selección táctil y contadores opcionales.
+  const proposedResult=(attempts,successes)=>attempts?successes/attempts>=.8?'good':successes/attempts>=.5?'mid':'bad':'';
+  const defaultSessionTime=session=>({morning:'09:00',noon:'14:00',night:'20:00'})[session]||'12:00';
+  function orderedExerciseChoices(recordExerciseId=''){
+    const choices=state.exercises.filter(e=>!e.archived||e.id===recordExerciseId),popular=frequentExercises('',4),popularIds=new Set(popular.map(e=>e.id));
+    return [...popular.filter(e=>choices.some(x=>x.id===e.id)),...choices.filter(e=>!popularIds.has(e.id))];
+  }
+  function registerModal(date,session,recordId='',preselect='',prefill=null){
+    if(!dateOK(date)||!SESSIONS.includes(session))return toast('Fecha o sesión inválidas.');
+    const r=recordId?findRecord(recordId):null;
+    if(recordId&&!r)return toast('Este entrenamiento ya no existe.');
+    if(date>today()&&!r)return toast('No puedes entrenar en un día futuro.');
+    const actualDate=r?.date||date,actualSession=r?.session||session;
+    const choices=orderedExerciseChoices(r?.exerciseId||''),popularIds=new Set(frequentExercises('',4).map(e=>e.id));
+    recordChoice=r?.exerciseId||preselect||'';
+    transientResult=r?.result||'';
+    const attempts=r?.attempts||0,successes=r?.successes||0,criterion=r?.criterion??prefill?.criterion??'',place=r?.place??prefill?.place??'';
+    const showTime=!!r||actualDate<today(),recordTime=r?.time||(actualDate<today()?defaultSessionTime(actualSession):localTime(new Date()));
+    showModal(`${modalHeader(r?'Editar entrenamiento':'Añadir entrenamiento')}
+      <div class="context-row"><span class="pill">${SINFO[actualSession][0]} ${SINFO[actualSession][1]}</span><span class="small muted">${esc(humanDate(actualDate,{day:'numeric',month:'long',year:'numeric'}))}</span></div>
+      <form id="record-form" data-record="${esc(r?.id||'')}" data-date="${actualDate}" data-session="${actualSession}">
+      <input type="hidden" name="exerciseId" value="${esc(recordChoice)}">
+      ${choices.length>10?'<label class="field"><span>Buscar ejercicio</span><input id="exercise-search" type="search" autocomplete="off" placeholder="Escribe para filtrar"></label>':''}
+      <div id="exercise-chips" class="chip-grid" role="group" aria-label="Seleccionar ejercicio">${choices.map((e,i)=>`${i===0&&popularIds.has(e.id)?'<div class="popular-label">Más usados en los últimos 30 días</div>':i>0&&popularIds.has(choices[i-1].id)&&!popularIds.has(e.id)?'<div class="popular-label">Todos los ejercicios</div>':''}<button type="button" class="exercise-chip ${recordChoice===e.id?'chosen':''}" data-act="choose-exercise" data-id="${esc(e.id)}" data-name="${esc(e.name.toLocaleLowerCase('es'))}" aria-pressed="${recordChoice===e.id}">${esc(e.name)}${e.archived?' (archivado)':''}</button>`).join('')}</div>
+      ${!r?`<button type="button" class="create-inline" data-act="new-from-session" data-date="${actualDate}" data-session="${actualSession}">＋ Crear un ejercicio nuevo</button>`:''}
+      ${showTime?`<label class="field"><span>Hora</span><input name="time" type="time" required value="${esc(recordTime)}"></label>`:`<input name="time" type="hidden" value="${esc(recordTime)}">`}
+      <div class="counter-pair"><div><p class="label">Intentos</p><div class="stepper"><button type="button" data-act="record-count" data-kind="attempts" data-dir="-1" aria-label="Restar intento">−</button><div class="stepper-output"><strong id="attempts-value">${attempts}</strong><span>intentos</span></div><button type="button" data-act="record-count" data-kind="attempts" data-dir="1" aria-label="Sumar intento">+</button></div></div><div><p class="label">Aciertos</p><div class="stepper"><button type="button" data-act="record-count" data-kind="successes" data-dir="-1" aria-label="Restar acierto">−</button><div class="stepper-output"><strong id="successes-value">${successes}</strong><span>aciertos</span></div><button type="button" data-act="record-count" data-kind="successes" data-dir="1" aria-label="Sumar acierto">+</button></div></div></div>
+      <input type="hidden" name="attempts" value="${attempts}"><input type="hidden" name="successes" value="${successes}">
+      <label class="field"><span>Criterio (opcional)</span><input name="criterion" maxlength="140" value="${esc(criterion)}" placeholder="Ej. quieto 10 s a 3 m"></label>
+      <label class="field"><span>Lugar (opcional)</span><select name="place"><option value="">Sin indicar</option>${Object.entries(PLACES).map(([id,label])=>`<option value="${id}" ${place===id?'selected':''}>${label}</option>`).join('')}</select></label>
+      <div class="form-separator"></div><p class="label result-label">¿Cómo ha salido?</p>
+      <div class="results">${Object.entries(RESULTS).map(([k,v])=>`<button type="button" class="result-btn ${transientResult===k?'chosen':''}" data-act="result-choice" data-result="${k}" aria-pressed="${transientResult===k}"><span class="emoji">${v[0]}</span><span>${v[1]}</span></button>`).join('')}</div>
+      <label class="field" style="margin-top:20px"><span>Observaciones (opcional)</span><textarea name="observations" maxlength="6000" rows="3" placeholder="¿Algo que quieras recordar?">${esc(r?.observations||'')}</textarea></label>
+      <button class="primary full save-record" type="submit">${r?'Guardar cambios':'Guardar entrenamiento'}</button></form>
+      ${r?`<button class="delete-record" data-act="record-delete-confirm" data-id="${esc(r.id)}">Eliminar entrenamiento</button>`:''}`);
+  }
+  function recordSave(form){
+    const id=form.dataset.record,date=form.dataset.date,session=form.dataset.session;
+    const exId=form.elements.exerciseId.value,observations=form.elements.observations.value.trim(),time=form.elements.time.value;
+    const attempts=Number(form.elements.attempts.value),successes=Number(form.elements.successes.value),criterion=form.elements.criterion.value.trim(),place=form.elements.place.value;
+    const ex=findEx(exId),previous=id?findRecord(id):null;
+    if(!ex){toast('Selecciona un ejercicio.');return;}
+    if(!has(RESULTS,transientResult)){toast('Selecciona cómo ha salido.');return;}
+    if(date>today()){toast('No puedes registrar entrenamientos futuros.');return;}
+    if(!timeOK(time)){toast('Indica una hora válida.');return;}
+    if(!Number.isInteger(attempts)||attempts<0||attempts>500||!Number.isInteger(successes)||successes<0||successes>attempts){toast('Revisa los intentos y aciertos.');return;}
+    const before=previous?clone(previous):null,result=transientResult,recordId=id||uid();
+    const ok=commit(d=>{
+      const unchanged=previous?.exerciseId===exId;
+      const item={
+        id:recordId,date,time,exerciseId:exId,
+        exerciseName:unchanged?previous.exerciseName:ex.name,session,result,observations
+      };
+      if(attempts){item.attempts=attempts;item.successes=successes;}
+      if(criterion)item.criterion=criterion;if(place)item.place=place;if(previous?.walkId)item.walkId=previous.walkId;
+      const idx=d.records.findIndex(r=>r.id===recordId);
+      if(idx>=0)d.records[idx]=item;else d.records.push(item);
+    },previous?'Entrenamiento actualizado.':'Entrenamiento guardado.');
+    if(ok){
+      closeModal();
+      undo=()=>commit(d=>{d.records=d.records.filter(r=>r.id!==recordId);if(before)d.records.push(before);},'Último cambio deshecho.');
+      toast(previous?'Entrenamiento actualizado.':'Entrenamiento guardado.',true,false,result==='good');
+    }
+  }
+  function updateRecordCounter(kind,dir){const form=$('record-form');if(!form)return;let attempts=Number(form.elements.attempts.value),successes=Number(form.elements.successes.value);if(kind==='attempts')attempts=Math.max(0,Math.min(500,attempts+dir));else successes=Math.max(0,Math.min(attempts,successes+dir));if(successes>attempts)successes=attempts;form.elements.attempts.value=attempts;form.elements.successes.value=successes;$('attempts-value').textContent=attempts;$('successes-value').textContent=successes;if(attempts){transientResult=proposedResult(attempts,successes);modalRoot.querySelectorAll('.result-btn').forEach(b=>{const chosen=b.dataset.result===transientResult;b.classList.toggle('chosen',chosen);b.setAttribute('aria-pressed',String(chosen));});}modalDirty=true;}
+  function recordDeleteConfirm(id){
+    if(!findRecord(id))return;
+    confirmSheet('Eliminar entrenamiento','Se eliminará solo esta entrada. Los demás entrenamientos del mismo ejercicio se conservarán. Podrás deshacerlo inmediatamente.','record-delete',`data-id="${esc(id)}"`,'Eliminar');
+  }
+  function recordDelete(id){
+    const r=findRecord(id);if(!r)return;
+    const before=clone(r),ok=commit(d=>{d.records=d.records.filter(x=>x.id!==id);},'Entrenamiento eliminado.');
+    if(ok){closeModal();undo=()=>commit(d=>{d.records.push(before);},'Entrenamiento recuperado.');toast('Entrenamiento eliminado.',true);}
+  }
+
+  // 7. Sesión en vivo: cada repetición se guarda fuera del diario hasta terminar.
+  function writeActive(key,value){try{localStorage.setItem(key,JSON.stringify(value));return true;}catch(err){toast('No se puede guardar la actividad en curso: '+(quotaExceeded(err)?'almacenamiento lleno.':err.message),false,true);return false;}}
+  function removeActive(key){try{localStorage.removeItem(key);}catch(_){}}
+  async function requestWakeLock(){try{if('wakeLock' in navigator)wakeLock=await navigator.wakeLock.request('screen');}catch(_){}}
+  function releaseWakeLock(){try{wakeLock?.release?.();}catch(_){}wakeLock=null;}
+  function showFullScreen(html){previousFocus=document.activeElement;modalDirty=false;modalRoot.innerHTML=`<section class="full-screen" role="dialog" aria-modal="true"><div class="full-screen-inner">${html}</div></section>`;document.body.style.overflow='hidden';requestAnimationFrame(()=>modalRoot.querySelector('button')?.focus({preventScroll:true}));}
+  function startSession(){
+    if(readActive(ACTIVE_WALK_KEY))return toast('Termina primero el paseo en curso.');
+    const choices=state.exercises.filter(e=>!e.archived);if(!choices.length)return toast('Crea un ejercicio antes de empezar.');
+    const first=frequentExercises('',1)[0]||choices[0],now=new Date();
+    const live={startedAt:now.toISOString(),date:today(),time:localTime(now),session:currentSession(),currentExerciseId:first.id,items:{},history:[]};
+    if(writeActive(ACTIVE_SESSION_KEY,live)){renderLiveSession();requestWakeLock();}
+  }
+  function sessionItem(live,id){if(!live.items[id])live.items[id]={attempts:0,successes:0,criterion:''};return live.items[id];}
+  function renderLiveSession(){
+    const live=readActive(ACTIVE_SESSION_KEY);if(!live)return startSession();
+    const choices=state.exercises.filter(e=>!e.archived),current=choices.find(e=>e.id===live.currentExerciseId)||choices[0];if(!current){removeActive(ACTIVE_SESSION_KEY);return closeModal();}
+    live.currentExerciseId=current.id;const item=sessionItem(live,current.id),pct=item.attempts?Math.round(item.successes/item.attempts*100):0;
+    writeActive(ACTIVE_SESSION_KEY,live);
+    showFullScreen(`<div class="mode-head"><strong>Sesión en curso</strong><button class="quiet" data-act="session-finish">Terminar</button></div><p class="mode-title">Ejercicio actual</p><h1 class="mode-exercise">${esc(current.name)}</h1><div class="live-score">${pct}%</div><p class="live-meta">${item.successes} aciertos de ${item.attempts} intentos</p><div class="giant-actions"><button class="giant-good" data-act="session-count" data-value="1" aria-label="Registrar acierto">✓</button><button class="giant-bad" data-act="session-count" data-value="0" aria-label="Registrar fallo">✗</button></div><button class="secondary full" data-act="session-undo" ${live.history.length?'':'disabled'}>↶ Deshacer última repetición</button><div class="mode-select"><p class="mode-title">Cambiar de ejercicio</p><div class="chip-grid">${choices.map(e=>`<button class="exercise-chip ${e.id===current.id?'chosen':''}" data-act="session-switch" data-id="${esc(e.id)}">${esc(e.name)}</button>`).join('')}</div></div></div>`);
+  }
+  function countSession(success){const live=readActive(ACTIVE_SESSION_KEY);if(!live)return;const item=sessionItem(live,live.currentExerciseId);if(item.attempts>=500)return toast('Has alcanzado 500 intentos para este ejercicio.');item.attempts++;if(success)item.successes++;live.history.push({exerciseId:live.currentExerciseId,success:!!success});writeActive(ACTIVE_SESSION_KEY,live);renderLiveSession();}
+  function undoSession(){const live=readActive(ACTIVE_SESSION_KEY),last=live?.history?.pop();if(!last)return;const item=sessionItem(live,last.exerciseId);item.attempts--;if(last.success)item.successes--;writeActive(ACTIVE_SESSION_KEY,live);renderLiveSession();}
+  function sessionFinishSummary(){
+    const live=readActive(ACTIVE_SESSION_KEY);if(!live)return;
+    const items=Object.entries(live.items).filter(([,x])=>x.attempts>0);if(!items.length)return confirmSheet('Terminar sesión','No hay repeticiones registradas. Puedes descartar esta sesión vacía.','session-discard','','Descartar sesión');
+    releaseWakeLock();
+    showModal(`${modalHeader('Resumen de la sesión')}<form id="finish-session-form">${items.map(([id,item])=>{const e=findEx(id),pct=Math.round(item.successes/item.attempts*100),result=proposedResult(item.attempts,item.successes),tip=item.attempts>=5?(pct>=80?'Puedes subir el criterio':pct<50?'Prueba a bajar el criterio':''):'';return `<div class="summary-row session-summary" data-id="${esc(id)}"><h3>${esc(e?.name||'Ejercicio')}</h3><p class="muted small">${item.successes}/${item.attempts} aciertos · ${pct}%</p>${tip?`<div class="hint-box">${tip}</div>`:''}<label class="field"><span>Criterio</span><input name="criterion-${esc(id)}" maxlength="140" value="${esc(item.criterion||'')}"></label><label class="field"><span>Resultado</span><select name="result-${esc(id)}">${Object.entries(RESULTS).map(([key,value])=>`<option value="${key}" ${key===result?'selected':''}>${value[0]} ${value[1]}</option>`).join('')}</select></label></div>`;}).join('')}<button class="primary full" type="submit">Guardar sesión</button></form>`);
+  }
+  function saveFinishedSession(form){
+    const live=readActive(ACTIVE_SESSION_KEY);if(!live)return toast('La sesión ya no está disponible.',false,true);
+    const entries=Object.entries(live.items).filter(([,x])=>x.attempts>0),created=[];
+    const ok=commit(d=>{for(const [id,item] of entries){const e=findEx(id,d);if(!e)invalid('Uno de los ejercicios ya no existe.');const result=form.elements[`result-${id}`].value,criterion=form.elements[`criterion-${id}`].value.trim();if(!has(RESULTS,result))invalid('Resultado de sesión inválido.');const record={id:uid(),date:live.date,time:live.time,exerciseId:id,exerciseName:e.name,session:live.session,result,observations:'',attempts:item.attempts,successes:item.successes};if(criterion)record.criterion=criterion;d.records.push(record);created.push(record.id);}},'Sesión guardada.');
+    if(ok){removeActive(ACTIVE_SESSION_KEY);releaseWakeLock();closeModal();undo=()=>commit(d=>{d.records=d.records.filter(r=>!created.includes(r.id));},'Sesión recuperada.');toast('Sesión guardada.',true,false,true);}
+  }
+  function discardSession(){removeActive(ACTIVE_SESSION_KEY);releaseWakeLock();closeModal();render();toast('Sesión descartada.');}
+
+  // 8. Paseo de entrenamiento con controles grandes y sin ubicación.
+  function walkStartModal(){
+    if(readActive(ACTIVE_SESSION_KEY))return toast('Termina primero la sesión en curso.');
+    showModal(`${modalHeader('Empezar paseo')}<form id="walk-start-form"><label class="field"><span>Lugar o ruta (opcional)</span><input name="route" maxlength="180" placeholder="Ej. vuelta por el parque"></label><label class="field"><span>Entorno</span><select name="place">${Object.entries(PLACES).map(([id,label])=>`<option value="${id}" ${id==='calle'?'selected':''}>${label}</option>`).join('')}</select></label><button class="primary full" type="submit">🦮 Empezar paseo</button></form><p class="muted small" style="margin-top:12px">No se usa el GPS.</p>`);
+  }
+  function beginWalk(form){
+    const now=new Date(),ids=state.settings.walkExerciseIds.filter(id=>findEx(id)&&!findEx(id).archived),counters={};ids.forEach(id=>counters[id]={attempts:0,successes:0});
+    const live={startedAt:now.toISOString(),date:today(),startTime:localTime(now),route:form.elements.route.value.trim(),place:form.elements.place.value||'calle',counters,encounters:[],sniffMin:0,notes:[]};
+    if(writeActive(ACTIVE_WALK_KEY,live)){renderLiveWalk();requestWakeLock();}
+  }
+  function walkElapsedSeconds(live){return Math.min(86400,Math.max(0,Math.floor((Date.now()-new Date(live.startedAt).getTime())/1000)));}
+  function walkDurationMin(live){return Math.max(1,Math.ceil(walkElapsedSeconds(live)/60));}
+  function formatElapsed(seconds){const hours=Math.floor(seconds/3600),minutes=Math.floor(seconds%3600/60),secs=seconds%60;return `${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;}
+  function startWalkTicker(){clearInterval(walkTimer);walkTimer=setInterval(()=>{const live=readActive(ACTIVE_WALK_KEY),clock=$('walk-clock');if(!live||!clock){clearInterval(walkTimer);return;}clock.textContent=formatElapsed(walkElapsedSeconds(live));},1000);}
+  function renderLiveWalk(){
+    const live=readActive(ACTIVE_WALK_KEY);if(!live)return walkStartModal();
+    const entries=Object.entries(live.counters).map(([id,count])=>({exercise:findEx(id),count})).filter(x=>x.exercise&&!x.exercise.archived),lastEncounter=live.encounters[live.encounters.length-1];
+    showFullScreen(`<div class="mode-head"><strong>Paseo en curso</strong><button class="quiet" data-act="walk-finish">Terminar paseo</button></div><div id="walk-clock" class="timer">${formatElapsed(walkElapsedSeconds(live))}</div><p class="live-meta">${esc(live.route||PLACES[live.place]||'Paseo de entrenamiento')} · ${live.encounters.length} encuentros · ${live.sniffMin} min de olfateo</p><div class="walk-controls" style="margin-top:22px">${entries.length?entries.map(({exercise,count})=>`<div class="walk-exercise"><div><strong>${esc(exercise.name)}</strong><p class="live-meta small">${count.successes}/${count.attempts}</p></div><button class="good" data-act="walk-count" data-id="${esc(exercise.id)}" data-value="1" aria-label="Acierto en ${esc(exercise.name)}">✓</button><button class="bad" data-act="walk-count" data-id="${esc(exercise.id)}" data-value="0" aria-label="Fallo en ${esc(exercise.name)}">✗</button></div>`).join(''):'<div class="notice">Elige ejercicios de paseo en Ajustes.</div>'}</div><div class="walk-tools"><button class="secondary" data-act="encounter-start">Encuentro</button><button class="secondary" data-act="walk-sniff">Olfateo +1 min</button><button class="secondary" data-act="walk-note">Nota rápida</button>${lastEncounter?`<button class="secondary" data-act="encounter-detail" data-id="${esc(lastEncounter.id)}">Detallar último</button>`:'<span></span>'}</div></div>`);startWalkTicker();
+  }
+  function countWalk(id,success){const live=readActive(ACTIVE_WALK_KEY),counter=live?.counters?.[id];if(!counter)return;if(counter.attempts>=500)return toast('Has alcanzado 500 intentos.');counter.attempts++;if(success)counter.successes++;writeActive(ACTIVE_WALK_KEY,live);renderLiveWalk();}
+  function encounterTypeModal(){const live=readActive(ACTIVE_WALK_KEY);if(!live)return;showModal(`${modalHeader('¿Qué habéis encontrado?')}<div class="encounter-grid">${Object.entries(ENCOUNTER_TYPES).map(([id,label])=>`<button class="secondary" data-act="encounter-type" data-type="${id}">${esc(label)}</button>`).join('')}</div>`);}
+  function encounterReactionModal(type){showModal(`${modalHeader(ENCOUNTER_TYPES[type]||'Encuentro')}<div class="encounter-grid">${Object.entries(REACTIONS).map(([id,label])=>`<button class="secondary" data-act="encounter-reaction" data-type="${esc(type)}" data-reaction="${id}">${esc(label)}</button>`).join('')}</div>`);}
+  function saveEncounter(type,reaction){const live=readActive(ACTIVE_WALK_KEY);if(!live||!has(ENCOUNTER_TYPES,type)||!has(REACTIONS,reaction))return;live.encounters.push({id:uid(),time:localTime(new Date()),type,reaction,distance:'',note:''});writeActive(ACTIVE_WALK_KEY,live);renderLiveWalk();toast('Encuentro guardado. Puedes añadir distancia o nota.');}
+  function encounterDetailModal(id){const live=readActive(ACTIVE_WALK_KEY),item=live?.encounters?.find(e=>e.id===id);if(!item)return;showModal(`${modalHeader('Detalle del encuentro')}<form id="encounter-detail-form" data-id="${esc(id)}"><label class="field"><span>Distancia aproximada</span><select name="distance"><option value="">Sin indicar</option>${['2','5','10','20','30+'].map(x=>`<option value="${x}" ${item.distance===x?'selected':''}>${x} m</option>`).join('')}</select></label><label class="field"><span>Nota (opcional)</span><textarea name="note" maxlength="500" rows="3">${esc(item.note)}</textarea></label><button class="primary full" type="submit">Guardar detalle</button></form>`);}
+  function saveEncounterDetail(form){const live=readActive(ACTIVE_WALK_KEY),item=live?.encounters?.find(e=>e.id===form.dataset.id);if(!item)return;item.distance=form.elements.distance.value;item.note=form.elements.note.value.trim();if(writeActive(ACTIVE_WALK_KEY,live)){renderLiveWalk();toast('Detalle guardado.');}}
+  function walkNoteModal(){showModal(`${modalHeader('Nota rápida')}<form id="walk-note-form"><label class="field"><span>Nota del paseo</span><textarea name="note" maxlength="500" required rows="3" placeholder="Algo que quieras recordar"></textarea></label><button class="primary full" type="submit">Guardar nota</button></form>`);}
+  function saveWalkNote(form){const live=readActive(ACTIVE_WALK_KEY),note=form.elements.note.value.trim();if(!live||!note)return;live.notes.push(note);if(writeActive(ACTIVE_WALK_KEY,live)){renderLiveWalk();toast('Nota añadida.');}}
+  function walkFinishSummary(){
+    const live=readActive(ACTIVE_WALK_KEY);if(!live)return;clearInterval(walkTimer);releaseWakeLock();const duration=walkDurationMin(live),counts={green:0,yellow:0,red:0};live.encounters.forEach(e=>counts[e.reaction]++);const calmDistances=live.encounters.filter(e=>e.reaction==='green'&&e.distance).map(e=>e.distance==='30+'?30:Number(e.distance)).filter(Number.isFinite),minimum=calmDistances.length?Math.min(...calmDistances):null;
+    showModal(`${modalHeader('Resumen del paseo')}<div class="stats-grid"><div class="metric"><div class="muted small">Duración</div><div class="val">${duration}</div><div class="small">minutos</div></div><div class="metric"><div class="muted small">Encuentros</div><div class="val">${live.encounters.length}</div><div class="small">${counts.green} tranquilos</div></div></div><div class="section-bar"><h2>Ejercicios</h2></div>${Object.entries(live.counters).filter(([,c])=>c.attempts).map(([id,c])=>`<div class="summary-row"><strong>${esc(findEx(id)?.name||'Ejercicio')}</strong><span class="muted small"> · ${c.successes}/${c.attempts} (${Math.round(c.successes/c.attempts*100)}%)</span></div>`).join('')||'<p class="muted small">No se registraron repeticiones.</p>'}<div class="section-bar"><h2>Encuentros</h2></div><p>${counts.green} tranquilos · ${counts.yellow} alerta · ${counts.red} reacciones</p>${minimum!==null?`<p class="muted small" style="margin-top:8px">Distancia mínima tranquila: ${minimum} m</p>`:''}<button class="primary full" style="margin-top:24px" data-act="walk-save">Guardar paseo</button><button class="danger-btn full" style="margin-top:10px" data-act="walk-discard-confirm">Descartar paseo</button>`);
+  }
+  function saveFinishedWalk(){
+    const live=readActive(ACTIVE_WALK_KEY);if(!live)return;const now=new Date(),walkId=uid(),duration=walkDurationMin(live),created=[];
+    const ok=commit(d=>{const walk={id:walkId,date:live.date,startTime:live.startTime,endTime:localTime(now),durationMin:duration,route:live.route,notes:live.notes.join('\n'),sniffMin:live.sniffMin,encounters:clone(live.encounters)};d.walks.push(walk);for(const [id,c] of Object.entries(live.counters)){if(!c.attempts)continue;const e=findEx(id,d);if(!e)invalid('Uno de los ejercicios del paseo ya no existe.');const record={id:uid(),date:live.date,time:live.startTime,exerciseId:id,exerciseName:e.name,session:live.startTime<'12:00'?'morning':live.startTime<'17:00'?'noon':'night',result:proposedResult(c.attempts,c.successes),observations:'',attempts:c.attempts,successes:c.successes,place:live.place||'calle',walkId};d.records.push(record);created.push(record.id);}},'Paseo guardado.');
+    if(ok){removeActive(ACTIVE_WALK_KEY);releaseWakeLock();clearInterval(walkTimer);closeModal();undo=()=>commit(d=>{d.walks=d.walks.filter(w=>w.id!==walkId);d.records=d.records.filter(r=>r.walkId!==walkId);},'Paseo eliminado.');toast('Paseo guardado.',true,false,true);}
+  }
+  function discardWalk(){removeActive(ACTIVE_WALK_KEY);releaseWakeLock();clearInterval(walkTimer);closeModal();render();toast('Paseo descartado.');}
+  function walkEditModal(id){const w=state.walks.find(x=>x.id===id);if(!w)return;showModal(`${modalHeader('Editar paseo')}<form id="walk-edit-form" data-id="${esc(id)}"><label class="field"><span>Lugar o ruta</span><input name="route" maxlength="180" value="${esc(w.route)}"></label><label class="field"><span>Minutos de olfateo</span><input name="sniffMin" type="number" min="0" max="1440" value="${w.sniffMin}"></label><label class="field"><span>Notas</span><textarea name="notes" maxlength="4000" rows="4">${esc(w.notes)}</textarea></label><button class="primary full" type="submit">Guardar cambios</button></form><button class="danger-btn full" style="margin-top:10px" data-act="walk-delete-confirm" data-id="${esc(id)}">Eliminar paseo</button>`);}
+  function saveWalkEdit(form){const id=form.dataset.id,sniff=Number(form.elements.sniffMin.value),route=form.elements.route.value.trim(),notes=form.elements.notes.value.trim();if(!Number.isInteger(sniff)||sniff<0||sniff>1440)return toast('Revisa los minutos de olfateo.');const ok=commit(d=>{const w=d.walks.find(x=>x.id===id);if(!w)invalid('El paseo ya no existe.');w.route=route;w.notes=notes;w.sniffMin=sniff;},'Paseo actualizado.');if(ok)closeModal();}
+  function deleteWalk(id){const w=state.walks.find(x=>x.id===id);if(!w)return;const records=state.records.filter(r=>r.walkId===id).map(clone),before=clone(w),ok=commit(d=>{d.walks=d.walks.filter(x=>x.id!==id);d.records=d.records.filter(r=>r.walkId!==id);},'Paseo eliminado.');if(ok){closeModal();undo=()=>commit(d=>{d.walks.push(before);d.records.push(...records);},'Paseo recuperado.');toast('Paseo eliminado.',true);}}
+
+  // 9. Historial y calendario con señal específica para los paseos.
+  function calendar(){
+    const [y,m]=month.split('-').map(Number),first=new Date(y,m-1,1);
+    const n=new Date(y,m,0).getDate(),offset=(first.getDay()+6)%7,days=[];
+    for(let i=0;i<offset;i++)days.push('<span></span>');
+    for(let i=1;i<=n;i++){
+      const d=`${month}-${String(i).padStart(2,'0')}`;
+      const rest=state.rests.includes(d),trained=(renderIndex.recordsByDate.get(d)||[]).length>0,walked=(renderIndex.walksByDate.get(d)||[]).length>0;
+      const status=trained?'good':rest?'rest':'';
+      days.push(`<button class="day ${d===today()?'today':''} ${d===selectedDay?'selected':''}" data-act="select-day" data-date="${d}" aria-label="${esc(humanDate(d))}${trained?', con entrenamientos':''}${walked?', con paseo':''}${rest?', descanso':''}" aria-pressed="${d===selectedDay}">${i}<span class="row" style="gap:3px"><span class="dot ${status}" style="${status?'':'opacity:0'}"></span>${walked?'<span class="dot walk"></span>':''}</span></button>`);
+    }
+    return `<div class="card calendar-card"><div class="calendar-header"><button class="quiet" data-act="month-step" data-dir="-1" aria-label="Mes anterior">‹</button><strong>${cap(new Intl.DateTimeFormat('es-ES',{month:'long',year:'numeric'}).format(first))}</strong><button class="quiet" data-act="month-step" data-dir="1" aria-label="Mes siguiente" ${month>=today().slice(0,7)?'disabled':''}>›</button></div><div class="cal-grid">${['L','M','X','J','V','S','D'].map(x=>`<div class="dow">${x}</div>`).join('')}${days.join('')}</div><div class="legend"><span><i class="dot good"></i> Entrenamientos</span><span><i class="dot walk"></i> Paseo</span><span><i class="dot rest"></i> Descanso</span></div></div>`;
+  }
+  function renderHistory(){
+    const rest=state.rests.includes(selectedDay),notes=state.notes.filter(n=>n.date===selectedDay).sort((a,b)=>b.time.localeCompare(a.time)),walks=(renderIndex.walksByDate.get(selectedDay)||[]).slice().sort((a,b)=>b.startTime.localeCompare(a.startTime));
+    const total=(renderIndex.recordsByDate.get(selectedDay)||[]).length;
+    return `${calendar()}<div class="section-bar"><div><h2>${cap(humanDate(selectedDay))}</h2><p class="muted small">${total} ${total===1?'registro':'registros'}${rest?', descanso':''}</p></div><button class="plain-btn" data-act="rest-toggle" data-date="${selectedDay}">${rest?'Quitar descanso':'😴 Descanso'}</button></div>
+      <div class="sessions-stack">${SESSIONS.map(s=>renderSession(selectedDay,s)).join('')}</div>
+      ${walks.length?`<div class="section-bar"><h2>Paseos del día</h2></div>${walks.map(renderWalkCard).join('')}`:''}
+      <div class="section-bar"><h2>Notas del día</h2><button class="plain-btn" data-act="note-open" data-date="${selectedDay}">+ Nota</button></div>
+      <div class="card note-card">${notes.length?notes.map(renderNote).join(''):empty('Sin notas en este día.','📝')}</div>`;
+  }
+
+  // 10. Progreso semanal por tasa de acierto y métricas de paseo.
+  function barsChart(recs){const by={};for(const r of recs)by[r.date]=(by[r.date]||0)+1;const start=daysInRange()||(recs.length?recs.reduce((m,r)=>r.date<m?r.date:m,recs[0].date):shiftDay(today(),-13));let labels=[];const end=today();let d=start>shiftDay(end,-21)?start:shiftDay(end,-21);while(d<=end&&labels.length<22){labels.push(d);d=shiftDay(d,1)}if(!labels.length)labels=[today()];const max=Math.max(1,...labels.map(s=>by[s]||0)),w=340,h=140,pad=24,bw=(w-2*pad)/labels.length;return `<svg class="chart" viewBox="0 0 ${w} ${h}" role="img" aria-label="Entrenamientos por día"><path class="chart-grid" d="M${pad} 12 V 113 H${w-pad}" fill="none"/>${labels.map((s,i)=>{const v=by[s]||0,barH=v/max*88,x=pad+i*bw+bw*.15;return `<rect class="bar" x="${x.toFixed(1)}" y="${(113-barH).toFixed(1)}" width="${(bw*.7).toFixed(1)}" height="${barH.toFixed(1)}" rx="3"><title>${esc(s)}: ${v} entrenamiento(s)</title></rect>`}).join('')}<text x="${pad}" y="133">${labels[0].slice(5).replace('-','/')}</text><text x="${w-pad}" y="133" text-anchor="end">${labels[labels.length-1].slice(5).replace('-','/')}</text></svg><p class="subtle">${labels.length} días más recientes del periodo, máximo diario: ${max}</p>`}
+  function resultStats(recs){return ['good','mid','bad'].map(k=>recs.filter(r=>r.result===k).length)}
+  function distribution(recs){const counts=resultStats(recs),t=recs.length,c=2*Math.PI*36;let offset=0;const classes=['chart-good','chart-mid','chart-bad'];const arcs=counts.map((v,i)=>{const len=t?c*v/t:0;const result=`<circle class="${classes[i]}" cx="54" cy="54" r="36" fill="none" stroke="currentColor" stroke-width="15" stroke-dasharray="${len.toFixed(3)} ${(c-len).toFixed(3)}" stroke-dashoffset="${(-offset).toFixed(3)}" transform="rotate(-90 54 54)"><title>${['Muy bien','Regular','Necesita mejorar'][i]}: ${v}</title></circle>`;offset+=len;return result}).join('');return `<div class="row" style="gap:20px;align-items:center"><svg viewBox="0 0 108 108" width="132" height="132" role="img" aria-label="Distribución gráfica de resultados"><circle class="chart-ring" cx="54" cy="54" r="36" fill="none" stroke-width="15"/>${arcs}<text class="chart-total" x="54" y="59" text-anchor="middle" style="font-size:21px;font-weight:800">${t}</text></svg><div class="grow">${counts.map((v,i)=>`<div class="row between" style="margin:9px 0;gap:8px"><span class="small"><i class="color-dot ${classes[i]}"></i>${['Muy bien','Regular','Mejorar'][i]}</span><b>${v}</b></div>`).join('')}</div></div>`}
+  function weekStart(date){const d=parseDay(date),offset=(d.getDay()+6)%7;d.setDate(d.getDate()-offset);return localDate(d);}
+  function successRate(recs){const counted=recs.filter(r=>r.attempts);if(counted.length){const attempts=counted.reduce((n,r)=>n+r.attempts,0),successes=counted.reduce((n,r)=>n+r.successes,0);return attempts?Math.round(successes/attempts*100):0;}return recs.length?Math.round(recs.filter(r=>r.result==='good').length/recs.length*100):null;}
+  function weeklySeries(recs){const groups=new Map();recs.forEach(r=>{const w=weekStart(r.date);if(!groups.has(w))groups.set(w,[]);groups.get(w).push(r);});return [...groups.entries()].sort((a,b)=>a[0].localeCompare(b[0])).slice(-12).map(([week,items])=>({week,rate:successRate(items),items}));}
+  function weeklyRateChart(recs){const data=weeklySeries(recs);if(!data.length)return empty('Todavía no hay resultados que mostrar.','📈');data.forEach((x,i)=>{const from=Math.max(0,i-2),values=data.slice(from,i+1).map(y=>y.rate).filter(Number.isFinite);x.average=Math.round(values.reduce((a,b)=>a+b,0)/values.length);});const w=340,h=170,p=30,x=i=>p+(w-2*p)*(data.length===1?.5:i/(data.length-1)),y=v=>125-v/100*100,path=key=>data.map((d,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(d[key]).toFixed(1)).join(' ');return `<svg class="chart" viewBox="0 0 ${w} ${h}" role="img" aria-label="Tasa semanal de acierto y media móvil"><path class="chart-grid" d="M30 25V 125H310" fill="none"/><path class="chart-main" d="${path('rate')}" fill="none" stroke-width="3"/><path class="chart-average" d="${path('average')}" fill="none" stroke-width="2" stroke-dasharray="6 5"/>${data.map((d,i)=>`<circle class="chart-good" cx="${x(i)}" cy="${y(d.rate)}" r="4"><title>Semana ${d.week}: ${d.rate}%</title></circle>`).join('')}<text x="30" y="146">${data[0].week.slice(5).replace('-','/')}</text><text x="310" y="146" text-anchor="end">${data[data.length-1].week.slice(5).replace('-','/')}</text><text x="30" y="164">Línea continua: tasa · discontinua: media de 3 semanas</text></svg>`;}
+  function trendFor(recs){const series=weeklySeries(recs);if(series.length<2)return {label:'estable',className:''};const diff=series.at(-1).rate-series.at(-2).rate;return diff>=5?{label:'mejorando',className:'up'}:diff<=-5?{label:'empeorando',className:'down'}:{label:'estable',className:''};}
+  function walkProgress(){const min=daysInRange(),walks=state.walks.filter(w=>(!min||w.date>=min)&&w.date<=today()),groups=new Map();walks.forEach(w=>{const key=weekStart(w.date);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(w);});const weeks=[...groups.entries()].sort((a,b)=>a[0].localeCompare(b[0])).slice(-8),encounters=walks.flatMap(w=>w.encounters),byType=Object.keys(ENCOUNTER_TYPES).map(type=>{const list=encounters.filter(e=>e.type===type);return {type,list};}).filter(x=>x.list.length);return `<div class="section-bar"><h2>Paseos</h2></div><div class="card">${weeks.length?weeks.map(([week,list])=>{const all=list.flatMap(w=>w.encounters),calm=all.filter(e=>e.reaction==='green').length,dist=all.filter(e=>e.reaction==='green'&&e.distance).map(e=>e.distance==='30+'?30:Number(e.distance)).filter(Number.isFinite);return `<div class="summary-row"><div class="row between"><strong>Semana ${esc(shortSpanishDate(week))}</strong><span>${list.length} paseos · ${list.reduce((n,w)=>n+w.durationMin,0)} min</span></div><p class="muted small">${all.length?`${Math.round(calm/all.length*100)}% de encuentros tranquilos`: 'Sin encuentros'}${dist.length?` · umbral tranquilo: ${Math.min(...dist)} m`:''}</p></div>`;}).join(''):empty('Los paseos aparecerán cuando termines el primero.','🦮')}${byType.length?`<div class="divider-title">Encuentros tranquilos por estímulo</div>${byType.map(x=>`<div class="row between summary-row"><span>${esc(ENCOUNTER_TYPES[x.type])}</span><b>${Math.round(x.list.filter(e=>e.reaction==='green').length/x.list.length*100)}%</b></div>`).join('')}`:''}</div>`;}
+  function renderProgress(){
+    const recs=recordsInRange(),total=recs.length,positive=recs.filter(r=>r.result==='good').length,days=new Set(recs.map(r=>r.date)).size,counts=new Map();recs.forEach(r=>counts.set(r.exerciseId,(counts.get(r.exerciseId)||0)+1));
+    const names=[...counts.entries()].map(([id,num])=>({ex:findEx(id),num})).filter(x=>x.ex).sort((a,b)=>b.num-a.num),options=state.exercises.filter(e=>!e.archived||(renderIndex.recordsByExercise.get(e.id)||[]).length);
+    if(!options.some(e=>e.id===progressId))progressId=options[0]?.id||'';const selected=options.find(e=>e.id===progressId),individual=progressId?recordsInRange(progressId).sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time)):[],trend=trendFor(individual),lastCriterion=individual.find(r=>r.criterion)?.criterion||'',overview=options.map(e=>{const records=recordsInRange(e.id).sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time)),itemTrend=trendFor(records);return {e,records,rate:successRate(records),trend:itemTrend,criterion:records.find(r=>r.criterion)?.criterion||''};}).filter(x=>x.records.length);
+    return `<div class="filters" role="group" aria-label="Filtrar periodo">${[['7','7 días'],['30','30 días'],['90','90 días'],['all','Todo']].map(([id,label])=>`<button data-act="filter" data-filter="${id}" class="${filter===id?'active':''}" aria-pressed="${filter===id}">${label}</button>`).join('')}</div><label class="field place-filter"><span>Lugar</span><select id="progress-place"><option value="">Todos los lugares</option>${Object.entries(PLACES).map(([id,label])=>`<option value="${id}" ${progressPlace===id?'selected':''}>${label}</option>`).join('')}</select></label><button type="button" class="secondary full trainer-summary-action" data-act="trainer-report">Resumen para tu adiestrador</button>
+      <div class="stats-grid simple-stats"><div class="metric"><div class="muted small">Entrenamientos</div><div class="val">${total}</div></div><div class="metric"><div class="muted small">Días entrenados</div><div class="val">${days}</div></div></div><div class="section-bar"><h2>Actividad reciente</h2></div><div class="card">${barsChart(recs)}</div><div class="section-bar"><h2>Resultados</h2>${total?`<span class="pill good">${Math.round(100*positive/total)}% muy bien</span>`:''}</div><div class="card">${total?distribution(recs):empty('Los resultados aparecerán cuando registres entrenamientos.','🌱')}</div><div class="section-bar"><h2>Más practicados</h2></div><div class="card ranking-card">${names.length?names.slice(0,5).map((x,i)=>`<div class="ranking-item"><div class="row between small"><span><b>${i+1}.</b> ${esc(x.ex.name)}</span><b>${x.num}</b></div><div class="ranking-track"><i style="width:${100*x.num/names[0].num}%"></i></div></div>`).join(''):empty('Aquí verás tus ejercicios más habituales.','🐕')}</div><div class="section-bar"><h2>Por ejercicio</h2></div><div class="card catalog-card">${overview.length?overview.map(x=>`<button class="history-item" data-act="progress-select" data-id="${esc(x.e.id)}"><span class="grow"><strong>${esc(x.e.name)}</strong><span class="subtle">${x.criterion?`Último criterio: ${esc(x.criterion)}`:'Sin criterio registrado'}</span></span><span class="trend ${x.trend.className}">${x.rate}% · ${x.trend.label}</span></button>`).join(''):empty('Sin ejercicios en este periodo y lugar.')}</div><div class="section-bar"><h2>Acierto semanal</h2></div><div class="card">${selected?`<label class="field"><span>Ejercicio</span><select id="progress-exercise">${options.map(e=>`<option value="${esc(e.id)}" ${e.id===progressId?'selected':''}>${esc(e.name)}${e.archived?' (archivado)':''}</option>`).join('')}</select></label><div class="row between"><span class="trend ${trend.className}">${trend.label}</span><strong>${individual.length} registros</strong></div>${lastCriterion?`<p class="hint-box">Último criterio: ${esc(lastCriterion)}</p>`:''}${weeklyRateChart(individual)}<div class="divider-title">Historial de este ejercicio</div>${individual.length?individual.slice(0,100).map(r=>`<button class="history-item" data-act="register" data-id="${esc(r.id)}"><span class="grow"><strong>${esc(r.date)}, ${SINFO[r.session][1]}</strong>${r.criterion?`<span class="subtle">${esc(r.criterion)}</span>`:r.observations?`<span class="subtle">${esc(r.observations)}</span>`:''}</span>${resultPill(r.result)}<span>›</span></button>`).join(''):'<p class="small muted">Aún no hay registros en el periodo y lugar elegidos.</p>'}`:empty('Crea un ejercicio para empezar.')}</div>${walkProgress()}`;
+  }
+  function reportBounds(kind='last7',customStart='',customEnd=''){
+    if(kind==='last7')return {start:shiftDay(today(),-6),end:today()};
+    if(kind==='previous'){
+      const offset=(parseDay(today()).getDay()+6)%7,monday=shiftDay(today(),-offset),end=shiftDay(monday,-1);
+      return {start:shiftDay(end,-6),end};
+    }
+    if(!dateOK(customStart)||!dateOK(customEnd))return {error:'Elige una fecha de inicio y una fecha de fin.'};
+    if(customStart>customEnd)return {error:'La fecha de inicio no puede ser posterior a la fecha de fin.'};
+    if(customEnd>today())return {error:'La fecha de fin no puede estar en el futuro.'};
+    return {start:customStart,end:customEnd};
+  }
+  const compactText=(text,max=140)=>{const value=String(text||'').replace(/\s+/g,' ').trim();return value.length>max?value.slice(0,max-1).trimEnd()+'…':value;};
+  const shortSpanishDate=date=>new Intl.DateTimeFormat('es-ES',{day:'numeric',month:'short'}).format(parseDay(date)).replace(/\./g,'');
+  function reportRangeLabel(start,end){
+    const a=parseDay(start),b=parseDay(end),sameMonth=a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth(),sameYear=a.getFullYear()===b.getFullYear();
+    const full=d=>new Intl.DateTimeFormat('es-ES',{day:'numeric',month:'long',year:'numeric'}).format(d);
+    if(sameMonth)return `Del ${a.getDate()} al ${full(b)}`;
+    if(sameYear)return `Del ${new Intl.DateTimeFormat('es-ES',{day:'numeric',month:'long'}).format(a)} al ${full(b)}`;
+    return `Del ${full(a)} al ${full(b)}`;
+  }
+  function buildTrainerReport(start,end,includeObservations=true,includeNotes=true){
+    const recs=state.records.filter(r=>r.date>=start&&r.date<=end).slice(),walks=state.walks.filter(w=>w.date>=start&&w.date<=end),name=state.profile.name.trim()||'mi perro';
+    const lines=[`*Resumen de entrenamiento de ${name}*`];
+    lines.push(reportRangeLabel(start,end));
+    if(!recs.length&&!walks.length){lines.push('','No hay entrenamientos ni paseos registrados en este periodo.');return {text:lines.join('\n'),count:0};}
+    const totalDays=dayDistance(start,end)+1,trainedDays=new Set(recs.map(r=>r.date)).size,restDays=state.rests.filter(d=>d>=start&&d<=end).length;
+    lines.push(`Entrenó ${trainedDays} de ${totalDays} días, ${recs.length} ${recs.length===1?'entrenamiento':'entrenamientos'} en total, ${restDays} ${restDays===1?'día':'días'} de descanso.`);
+    if(recs.length)lines.push('','*Por ejercicio*');
+    const groups=new Map();
+    recs.forEach(r=>{if(!groups.has(r.exerciseId))groups.set(r.exerciseId,[]);groups.get(r.exerciseId).push(r);});
+    const ordered=[...groups.entries()].map(([id,items])=>({id,items,name:findEx(id)?.name||items.slice().sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time))[0].exerciseName})).sort((a,b)=>b.items.length-a.items.length||a.name.localeCompare(b.name,'es'));
+    ordered.forEach(group=>{
+      const counts={good:0,mid:0,bad:0};group.items.forEach(r=>counts[r.result]++);
+      const parts=[];if(counts.good)parts.push(`${counts.good} muy bien`);if(counts.mid)parts.push(`${counts.mid} regular`);if(counts.bad)parts.push(`${counts.bad} necesita mejorar`);
+      const counted=group.items.filter(r=>r.attempts),attempts=counted.reduce((n,r)=>n+r.attempts,0),successes=counted.reduce((n,r)=>n+r.successes,0),latest=group.items.slice().sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time)).find(r=>r.criterion);
+      lines.push(`${group.name}: ${group.items.length} (${parts.join(', ')})${attempts?`. ${successes}/${attempts} aciertos (${Math.round(successes/attempts*100)}%)`:''}`);
+      if(latest)lines.push(`  Último criterio: ${compactText(latest.criterion)}`);
+      if(includeObservations)group.items.filter(r=>r.observations.trim()).sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time)).slice(0,3).forEach(r=>lines.push(`  ${shortSpanishDate(r.date)}: ${compactText(r.observations)}`));
+    });
+    if(walks.length){
+      const encounters=walks.flatMap(w=>w.encounters),reactions={green:0,yellow:0,red:0};encounters.forEach(e=>reactions[e.reaction]++);
+      lines.push('','*Paseos*',`${walks.length} ${walks.length===1?'paseo':'paseos'}, ${walks.reduce((n,w)=>n+w.durationMin,0)} minutos en total, ${walks.reduce((n,w)=>n+w.sniffMin,0)} minutos de olfateo.`);
+      if(encounters.length)lines.push(`${encounters.length} encuentros: ${reactions.green} tranquilos, ${reactions.yellow} alerta pero responde, ${reactions.red} reacciones.`);
+    }
+    const discuss=ordered.filter(group=>group.items.length>=2&&group.items.filter(r=>r.result==='mid'||r.result==='bad').length/group.items.length>=.5);
+    if(discuss.length){lines.push('','*Para comentar en clase*');discuss.forEach(group=>lines.push(`${group.name}: al menos la mitad de los intentos fueron regular o necesita mejorar`));}
+    if(includeNotes){
+      const notes=state.notes.filter(n=>n.date>=start&&n.date<=end).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+      if(notes.length){lines.push('','*Notas*');notes.forEach(n=>lines.push(`${shortSpanishDate(n.date)}: ${compactText(n.text,6000)}`));}
+    }
+    return {text:lines.join('\n'),count:recs.length+walks.length};
+  }
+  function trainerReportModal(){
+    const bounds=reportBounds(),report=buildTrainerReport(bounds.start,bounds.end,true,true);
+    reportLastGenerated=report.text;reportEdited=false;
+    showModal(`${modalHeader('Resumen para tu adiestrador')}<div class="report-options"><label class="field" style="margin-bottom:0"><span>Periodo</span><select id="trainer-report-period"><option value="last7">Últimos 7 días</option><option value="previous">Semana pasada</option><option value="custom">Personalizado</option></select></label><div id="report-custom" class="custom-dates hide"><label class="field" style="margin-bottom:0"><span>Inicio</span><input id="report-start" type="date" value="${bounds.start}" max="${today()}"></label><label class="field" style="margin-bottom:0"><span>Fin</span><input id="report-end" type="date" value="${bounds.end}" max="${today()}"></label></div><label class="switch-row"><input id="report-observations" type="checkbox" checked> Incluir observaciones</label><label class="switch-row"><input id="report-notes" type="checkbox" checked> Incluir notas del día</label></div><p id="report-error" class="report-error hide"></p><label class="field"><span>Vista previa editable</span><textarea id="trainer-report-preview" class="report-preview" rows="15">${esc(report.text)}</textarea></label><div class="actions"><button id="report-share" class="primary" type="button" data-act="report-share" ${report.count?'':'disabled'}>Compartir</button><button id="report-copy" class="secondary" type="button" data-act="report-copy" ${report.count?'':'disabled'}>Copiar</button></div>`);
+  }
+  function updateTrainerReport(){
+    const period=$('trainer-report-period');if(!period)return;
+    const custom=$('report-custom');custom.classList.toggle('hide',period.value!=='custom');
+    const bounds=reportBounds(period.value,$('report-start').value,$('report-end').value),error=$('report-error'),share=$('report-share'),copy=$('report-copy');
+    if(bounds.error){error.textContent=bounds.error;error.classList.remove('hide');share.disabled=true;copy.disabled=true;return;}
+    error.textContent='';error.classList.add('hide');
+    if(reportEdited&&!window.confirm('Has editado la vista previa. ¿Quieres regenerarla y sustituir tus cambios?'))return;
+    const report=buildTrainerReport(bounds.start,bounds.end,$('report-observations').checked,$('report-notes').checked),preview=$('trainer-report-preview');
+    preview.value=report.text;reportLastGenerated=report.text;reportEdited=false;share.disabled=!report.count;copy.disabled=!report.count;
+  }
+  async function shareTrainerReport(){
+    const text=$('trainer-report-preview')?.value;if(!text)return;
+    if(typeof navigator.share!=='function'){toast('Compartir no está disponible. Usa Copiar.');return;}
+    try{await navigator.share({text});}catch(err){if(err?.name!=='AbortError')toast('No se pudo compartir. Copia el resumen e inténtalo desde tu aplicación de mensajería.',false,true);}
+  }
+  async function copyTrainerReport(){
+    const preview=$('trainer-report-preview');if(!preview)return;
+    let copied=false;
+    try{if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(preview.value);copied=true;}}catch(_){}
+    if(!copied){try{preview.focus();preview.select();copied=document.execCommand('copy');}catch(_){}}
+    if(copied)toast('Resumen copiado');else toast('No se pudo copiar. Mantén pulsado el texto y elige Copiar.',false,true);
+  }
+
+  // 10. Notas y descansos (comportamiento conservado).
+  function noteModal(id='',date=today()){
+    const n=id?state.notes.find(x=>x.id===id):null;if(id&&!n)return;
+    showModal(`${modalHeader(n?'Editar nota':'Añadir nota')}<form id="note-form" data-id="${esc(id)}"><label class="field"><span>Fecha</span><input name="date" type="date" value="${esc(n?.date||date)}" max="${today()}" required></label><label class="field"><span>Observaciones</span><textarea name="text" required maxlength="6000" rows="5" placeholder="¿Qué quieres recordar?">${esc(n?.text||'')}</textarea></label><button type="submit" class="primary full">Guardar nota</button></form>${n?`<button class="danger-btn full" style="margin-top:11px" data-act="note-delete-confirm" data-id="${esc(id)}">Eliminar nota</button>`:''}`);
+  }
+  function noteSave(form){
+    const id=form.dataset.id,date=form.elements.date.value,text=form.elements.text.value.trim();
+    if(!text||!dateOK(date)||date>today()){toast('La nota no puede tener una fecha futura.');return;}
+    const ok=commit(d=>{const existing=d.notes.find(x=>x.id===id);if(existing){existing.date=date;existing.text=text;}else d.notes.push({id:uid(),date,time:localTime(new Date()),text});},'Nota guardada.');
+    if(ok)closeModal();
+  }
+  function restToggle(date){commit(d=>{const i=d.rests.indexOf(date);if(i>=0)d.rests.splice(i,1);else d.rests.push(date);},'Día de descanso actualizado.');}
+
+  // 12. Ajustes del perfil y catálogo de paseo.
+  function renderSettings(){
+    const e=state.profile;
+    const theme=uiPrefs.theme||'auto';
+    return `<section class="settings-group"><div class="section-bar first-section"><h2>Apariencia</h2></div><div class="card"><div class="theme-seg" role="radiogroup" aria-label="Tema">${[['auto','Automático'],['light','Claro'],['dark','Oscuro']].map(([id,label])=>`<button type="button" role="radio" aria-checked="${theme===id}" class="${theme===id?'on':''}" data-act="theme-set" data-theme="${id}">${label}</button>`).join('')}</div><p class="muted small" style="margin-top:12px">Automático sigue el tema del dispositivo.</p></div></section>
+      <section class="settings-group"><div class="section-bar"><h2>Preferencias de la aplicación</h2></div><div class="card"><form id="profile-form"><h3 style="margin-bottom:14px">Perfil del perro</h3><div class="row" style="margin-bottom:16px">${avatar()}<div class="grow"><strong>${esc(e.name||'Tu compañero de entrenamientos')}</strong><p class="muted small">El nombre que aparecerá en el diario</p></div></div><label class="field"><span>Nombre</span><input name="name" value="${esc(e.name)}" maxlength="100" placeholder="Ej. Thor"></label><button class="primary full" type="submit">Guardar perfil</button></form></div><div class="card"><form id="walk-settings-form"><h3 style="margin-bottom:8px">Ejercicios del paseo</h3><p class="muted small" style="margin-bottom:12px">Elige qué contadores aparecen durante un paseo.</p>${state.exercises.filter(x=>!x.archived).map(x=>`<label class="check-item"><input type="checkbox" name="walkExerciseIds" value="${esc(x.id)}" ${state.settings.walkExerciseIds.includes(x.id)?'checked':''}> ${esc(x.name)}</label>`).join('')}<button class="primary full" style="margin-top:14px" type="submit">Guardar ejercicios de paseo</button></form></div></section>
+      <section class="settings-group"><div class="section-bar"><h2>Datos y copias de seguridad</h2></div><div class="card"><p class="small muted">Tus entrenamientos se guardan en este navegador. Exporta copias JSON periódicamente para proteger el historial.</p><div class="actions"><button class="primary" data-act="export">↓ Exportar copia</button><button class="secondary" data-act="import-pick">↑ Restaurar copia</button></div><p class="muted small" style="margin-top:12px">Última copia exportada: ${state.settings.lastExportDate?esc(state.settings.lastExportDate):'Ninguna'}</p>${autoBackupCard()}</div>${storageCard()}<div class="card"><div class="list-item"><div class="grow"><strong>Guardado local</strong><div class="desc">Las copias JSON permiten recuperar tus datos si el navegador elimina el almacenamiento del sitio.</div></div></div><button class="danger-btn full" style="margin-top:14px" data-act="reset-confirm">Reiniciar todos los datos</button></div></section>
+      <section class="settings-group"><div class="section-bar"><h2>Acerca de</h2></div><div class="card"><div class="list-item">${brandMark()}<div class="grow"><strong>${APP_META.name}</strong><div class="desc">${APP_META.description}</div></div><button class="secondary" type="button" data-act="about-open">Ver</button></div></div></section>`;
+  }
+  function aboutModal(){showModal(`<div class="about-body"><div class="about-logo">${brandMark()}</div><h2>${APP_META.name}</h2><p class="about-description">${APP_META.description}</p><p class="about-version">Versión ${APP_META.version}</p><div class="about-divider"></div><div class="author-signature">By ${APP_META.author}</div><div class="copyright-signature">${APP_META.copyright}</div><div class="about-actions"><button class="primary full" type="button" data-act="close">Cerrar</button></div></div>`);}
+  // 12. Copias de seguridad y restauración segura.
+  function downloadText(text,filename,type='application/json;charset=utf-8'){
+    const blob=new Blob([text],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');
+    a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),30000);
+  }
+  async function shareOrDownload(text,filename){
+    const file=new File([text],filename,{type:'application/json'});
+    if(navigator.canShare?.({files:[file]})){
+      try{await navigator.share({files:[file],title:'Copia de DogTrainer'});return true;}
+      catch(err){if(err?.name==='AbortError')return false;throw err;}
+    }
+    downloadText(text,filename);return true;
+  }
+  async function exportBackup(){
+    if(!state)return;
+    const copy=clone(state);copy.settings.lastExportDate=today()+' '+localTime(new Date());
+    try{
+      validate(copy);
+       const done=await shareOrDownload(JSON.stringify({appId:APP,schemaVersion:SCHEMA,exportedAt:new Date().toISOString(),data:copy},null,2),`copia_${today()}_${APP_META.fileSuffix}.json`);
+      if(!done)return;
+      commit(d=>{d.settings.lastExportDate=copy.settings.lastExportDate;},'Copia JSON preparada para descargar.');
+    }catch(err){toast('No se pudo exportar: '+err.message,false,true);}
+  }
+  async function rawExport(){
+    try{
+      const raw=localStorage.getItem(KEY);
+      if(!raw)return toast('No hay datos locales que exportar.');
+       await shareOrDownload(raw,`datos_${today()}_${APP_META.fileSuffix}.json`);
+    }catch(err){toast('No se pudo obtener el contenido actual.',false,true);}
+  }
+  function showImportConfirmation(restored){
+    removeRetiredProfileFields(restored);validate(restored);pendingImport=restored;
+    showModal(`${modalHeader('Copia encontrada ✓')}<p class="muted small">Archivo validado para DogTrainer 1.0.</p><div class="card backup-summary"><div class="row between"><span>Ejercicios</span><b>${restored.exercises.length}</b></div><div class="line"></div><div class="row between"><span>Entrenamientos</span><b>${restored.records.length}</b></div><div class="line"></div><div class="row between"><span>Paseos</span><b>${restored.walks.length}</b></div><div class="line"></div><div class="row between"><span>Notas</span><b>${restored.notes.length}</b></div></div><div class="notice">Restaurar sustituirá todos los datos actuales, no fusionará historiales. Exporta primero una copia si quieres conservarlos.</div><button class="secondary full" data-act="${broken?'raw-export':'export'}">↓ ${broken?'Guardar datos actuales':'Exportar mis datos actuales'}</button><div class="actions"><button class="secondary" data-act="close">Cancelar</button><button class="danger-btn" data-act="import-confirm">Restaurar copia</button></div>`);
+  }
+  async function importFile(file){
+    if(!file)return;
+    if(file.size>15*1024*1024){toast('El archivo supera el límite de 15 MB.',false,true);return;}
+    try{
+      const data=JSON.parse(await file.text());
+      if(!data||data.appId!==APP||data.schemaVersion!==SCHEMA)invalid('Solo se aceptan copias de DogTrainer 1.0.');
+      let restored;
+      if(data.data&&typeof data.exportedAt==='string'){restored=clone(data.data);removeRetiredProfileFields(restored);validate(restored);}
+      else{restored=clone(data);removeRetiredProfileFields(restored);validate(restored);}
+      showImportConfirmation(restored);
+    }catch(err){pendingImport=null;toast('Importación rechazada: '+err.message,false,true);}
+  }
+  const quotaExceeded=err=>err?.name==='QuotaExceededError'||err?.code===22||err?.code===1014;
+  function saveAutoBackup(reason,continueAct){
+    if(!state)return true;
+    try{
+      validate(state);
+      localStorage.setItem(AUTOBACKUP_KEY,JSON.stringify({savedAt:new Date().toISOString(),reason,data:clone(state)}));
+      return true;
+    }catch(err){
+      if(quotaExceeded(err)){
+        showModal(`${modalHeader('No cabe la copia automática')}<div class="notice">No hay espacio suficiente para guardar una copia de seguridad antes de continuar. Si sigues, no podrás recuperar automáticamente los datos actuales.</div><div class="actions"><button class="secondary" data-act="close">Cancelar</button><button class="danger-btn" data-act="${esc(continueAct)}">Continuar sin copia</button></div>`);
+      }else toast('No se ha podido crear la copia automática: '+err.message,false,true);
+      return false;
+    }
+  }
+  function completeImport(){
+    if(!pendingImport)return;
+    try{
+      const restored=pendingImport;persist(restored);pendingImport=null;broken=null;
+      selectedDay=today();month=selectedDay.slice(0,7);tab='today';closeModal();render();
+      toast('Copia restaurada correctamente.');
+    }catch(err){toast('No se ha restaurado: '+err.message,false,true);}
+  }
+  function importConfirm(){
+    if(!pendingImport)return;
+    if(saveAutoBackup('antes de importar una copia','import-without-backup'))completeImport();
+  }
+  function resetConfirm(){confirmSheet('Reiniciar DogTrainer','Se eliminarán los datos actuales de DogTrainer guardados en este navegador. Exporta una copia antes de continuar.','reset-all','','Eliminar todos los datos');}
+  function completeReset(){
+    try{
+      persist(seed());localStorage.removeItem(ACTIVE_SESSION_KEY);localStorage.removeItem(ACTIVE_WALK_KEY);broken=null;selectedDay=today();month=selectedDay.slice(0,7);tab='today';closeModal();render();toast('Aplicación reiniciada.');
+    }catch(err){toast('No se pudo reiniciar: '+err.message,false,true);}
+  }
+  function resetAll(){if(saveAutoBackup('antes de reiniciar la aplicación','reset-without-backup'))completeReset();}
+  function restoreAutoBackup(){
+    try{
+      const backup=readAutoBackup();if(!backup||backup.invalid)invalid('La copia automática no es válida.');
+      validate(backup.data);showImportConfirmation(clone(backup.data));
+    }catch(err){toast('No se puede restaurar la copia automática: '+err.message,false,true);}
+  }
+  function downloadAutoBackup(){
+    try{
+      const backup=readAutoBackup();if(!backup||backup.invalid)invalid('La copia automática no es válida.');
+      validate(backup.data);
+      downloadText(JSON.stringify({appId:APP,schemaVersion:SCHEMA,exportedAt:backup.savedAt,data:backup.data},null,2),`auto_${today()}_${APP_META.fileSuffix}.json`);
+    }catch(err){toast('No se puede descargar la copia automática: '+err.message,false,true);}
+  }
+
+  // 13. Eventos delegados: un listener por tipo y sin handlers duplicados.
+  document.addEventListener('click',ev=>{
+    if(ev.target.matches('[data-overlay]')){closeModal();return;}
+    const btn=ev.target.closest('[data-act]');if(!btn)return;
+    const {act:a,id='',date='',session=''}=btn.dataset,dir=Number(btn.dataset.dir);
+    switch(a){
+      case 'nav':tab=btn.dataset.tab;render();window.scrollTo(0,0);break;
+      case 'close':closeModal();break;
+      case 'ex-new':newExerciseContext=null;exerciseModal();break;
+      case 'ex-edit':exerciseModal(id);break;
+      case 'ex-archive':archiveExercise(id);break;
+      case 'ex-delete-confirm':exDelete(id);break;
+      case 'ex-delete':deleteExercise(id);break;
+      case 'register':{
+        const r=id?findRecord(id):null;
+        if(r)registerModal(r.date,r.session,r.id);
+        else registerModal(date,session);
+        break;
+      }
+      case 'quick-register':registerModal(date,session,'',id);break;
+      case 'repeat-last':{const last=lastRecord();if(last)registerModal(today(),currentSession(),'',last.exerciseId,{criterion:last.criterion||'',place:last.place||''});break;}
+      case 'choose-exercise':recordChoice=id;{const form=$('record-form');if(form)form.elements.exerciseId.value=id;modalRoot.querySelectorAll('.exercise-chip[data-act="choose-exercise"]').forEach(x=>{const chosen=x.dataset.id===id;x.classList.toggle('chosen',chosen);x.setAttribute('aria-pressed',String(chosen));});modalDirty=true;}break;
+      case 'record-count':updateRecordCounter(btn.dataset.kind,dir);break;
+      case 'new-from-session':newExerciseContext={date,session};exerciseModal();break;
+      case 'result-choice':{
+        transientResult=btn.dataset.result;
+        modalRoot.querySelectorAll('.result-btn').forEach(b=>{const chosen=b.dataset.result===transientResult;b.classList.toggle('chosen',chosen);b.setAttribute('aria-pressed',String(chosen));});modalDirty=true;break;
+      }
+      case 'session-start':startSession();break;
+      case 'session-resume':renderLiveSession();requestWakeLock();break;
+      case 'session-count':countSession(btn.dataset.value==='1');break;
+      case 'session-undo':undoSession();break;
+      case 'session-switch':{const live=readActive(ACTIVE_SESSION_KEY);if(live){live.currentExerciseId=id;writeActive(ACTIVE_SESSION_KEY,live);renderLiveSession();}break;}
+      case 'session-finish':sessionFinishSummary();break;
+      case 'session-discard':discardSession();break;
+      case 'walk-start':walkStartModal();break;
+      case 'walk-resume':renderLiveWalk();requestWakeLock();break;
+      case 'walk-count':countWalk(id,btn.dataset.value==='1');break;
+      case 'walk-sniff':{const live=readActive(ACTIVE_WALK_KEY);if(live){live.sniffMin=Math.min(1440,live.sniffMin+1);writeActive(ACTIVE_WALK_KEY,live);renderLiveWalk();}break;}
+      case 'walk-note':walkNoteModal();break;
+      case 'encounter-start':encounterTypeModal();break;
+      case 'encounter-type':encounterReactionModal(btn.dataset.type);break;
+      case 'encounter-reaction':saveEncounter(btn.dataset.type,btn.dataset.reaction);break;
+      case 'encounter-detail':encounterDetailModal(id);break;
+      case 'walk-finish':walkFinishSummary();break;
+      case 'walk-save':saveFinishedWalk();break;
+      case 'walk-discard-confirm':confirmSheet('Descartar paseo','Se perderán los contadores, encuentros y notas de este paseo.','walk-discard','','Descartar');break;
+      case 'walk-discard':discardWalk();break;
+      case 'walk-edit':walkEditModal(id);break;
+      case 'walk-delete-confirm':confirmSheet('Eliminar paseo','También se eliminarán los registros creados por este paseo. Podrás deshacerlo.','walk-delete',`data-id="${esc(id)}"`,'Eliminar');break;
+      case 'walk-delete':deleteWalk(id);break;
+      case 'record-delete-confirm':recordDeleteConfirm(id);break;
+      case 'record-delete':recordDelete(id);break;
+      case 'undo':{const fn=undo;undo=null;toastRoot.innerHTML='';if(fn)fn();break;}
+      case 'dismiss-install':uiPrefs.installDismissedUntil=Date.now()+30*86400000;saveUiPrefs();render();break;
+      case 'snooze-backup':uiPrefs.backupSnoozedUntil=Date.now()+3*86400000;saveUiPrefs();render();break;
+      case 'note-open':noteModal(id,date||today());break;
+      case 'note-delete-confirm':confirmSheet('Eliminar nota','Esta nota se eliminará permanentemente.','note-delete',`data-id="${esc(id)}"`,'Eliminar nota');break;
+      case 'note-delete':{const ok=commit(d=>{d.notes=d.notes.filter(n=>n.id!==id);},'Nota eliminada.');if(ok)closeModal();break;}
+      case 'rest-toggle':restToggle(date);break;
+      case 'select-day':selectedDay=date;render();break;
+      case 'month-step':{
+        const [y,m]=month.split('-').map(Number),next=new Date(y,m-1+dir,1);
+        const target=localDate(next).slice(0,7);if(target>today().slice(0,7))break;month=target;selectedDay=month===today().slice(0,7)?today():month+'-01';render();break;
+      }
+      case 'filter':filter=btn.dataset.filter;render();break;
+      case 'progress-select':progressId=id;render();break;
+      case 'trainer-report':trainerReportModal();break;
+      case 'report-share':shareTrainerReport();break;
+      case 'report-copy':copyTrainerReport();break;
+      case 'export':exportBackup();break;
+       case 'theme-set':uiPrefs.theme=btn.dataset.theme;saveUiPrefs();applyTheme();render();break;
+       case 'about-open':aboutModal();break;
+      case 'raw-export':rawExport();break;
+      case 'import-pick':$('backup-picker').value='';$('backup-picker').click();break;
+      case 'import-confirm':importConfirm();break;
+      case 'import-without-backup':completeImport();break;
+      case 'restore-autobackup':restoreAutoBackup();break;
+      case 'download-autobackup':downloadAutoBackup();break;
+      case 'reset-confirm':resetConfirm();break;
+      case 'reset-all':resetAll();break;
+      case 'reset-without-backup':completeReset();break;
+      case 'sw-update':
+        if(waitingServiceWorker){try{sessionStorage.setItem('dogtrainer_sw_reload_once','pending');}catch(_){}waitingServiceWorker.postMessage({type:'SKIP_WAITING'});}
+        break;
+    }
+  });
+  document.addEventListener('submit',ev=>{
+    const f=ev.target;
+    if(!['exercise-form','record-form','note-form','profile-form','walk-settings-form','finish-session-form','walk-start-form','encounter-detail-form','walk-note-form','walk-edit-form'].includes(f.id))return;
+    ev.preventDefault();
+    if(f.id==='exercise-form')saveExercise(f);
+    if(f.id==='record-form')recordSave(f);
+    if(f.id==='note-form')noteSave(f);
+    if(f.id==='walk-start-form')beginWalk(f);
+    if(f.id==='finish-session-form')saveFinishedSession(f);
+    if(f.id==='encounter-detail-form')saveEncounterDetail(f);
+    if(f.id==='walk-note-form')saveWalkNote(f);
+    if(f.id==='walk-edit-form')saveWalkEdit(f);
+    if(f.id==='walk-settings-form'){
+      const ids=[...f.querySelectorAll('input[name="walkExerciseIds"]:checked')].map(x=>x.value);
+      commit(d=>{d.settings.walkExerciseIds=ids;},'Ejercicios del paseo actualizados.');
+    }
+    if(f.id==='profile-form'){
+      const name=f.elements.name.value.trim();commit(d=>{d.profile.name=name;},'Perfil guardado.');
+    }
+  });
+  document.addEventListener('change',ev=>{
+    if(ev.target.id==='progress-exercise'){progressId=ev.target.value;render();}
+    else if(ev.target.id==='progress-place'){progressPlace=ev.target.value;render();}
+    else if(['trainer-report-period','report-start','report-end','report-observations','report-notes'].includes(ev.target.id))updateTrainerReport();
+    if(modalRoot.contains?.(ev.target)&&ev.target.matches('input,textarea,select'))modalDirty=true;
+  });
+  document.addEventListener('input',ev=>{
+    if(ev.target.id==='trainer-report-preview')reportEdited=ev.target.value!==reportLastGenerated;
+    if(ev.target.id==='exercise-search'){const q=ev.target.value.trim().toLocaleLowerCase('es');modalRoot.querySelectorAll('.exercise-chip[data-act="choose-exercise"]').forEach(btn=>btn.classList.toggle('hide',!btn.dataset.name.includes(q)));}
+    if(modalRoot.contains(ev.target)&&ev.target.matches('input,textarea,select'))modalDirty=true;
+  });
+  $('backup-picker').addEventListener('change',ev=>{if(ev.target.files[0])importFile(ev.target.files[0]);ev.target.value='';});
+  document.addEventListener('keydown',ev=>{
+    if(ev.key==='Escape'&&modalRoot.innerHTML)closeModal();
+    if(ev.key==='Tab'&&modalRoot.innerHTML){
+      const focusable=Array.from(modalRoot.querySelectorAll('button:not([disabled]),input:not([disabled]),textarea:not([disabled]),select:not([disabled])'));
+      if(!focusable.length)return;
+      const first=focusable[0],last=focusable[focusable.length-1];
+      if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last.focus();}
+      else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first.focus();}
+    }
+  });
+  let lastToday=today();
+  function dayRollover(){const t=today();if(t===lastToday||broken)return;lastToday=t;if(tab!=='history')selectedDay=t;render();}
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){dayRollover();if(readActive(ACTIVE_SESSION_KEY)||readActive(ACTIVE_WALK_KEY))requestWakeLock();}});
+  setInterval(dayRollover,60000);
+  function markPng(size,padding=0){
+    return new Promise((resolve,reject)=>{
+      const canvas=document.createElement('canvas');canvas.width=size;canvas.height=size;
+      const ctx=canvas.getContext('2d');if(!ctx){reject(new Error('Canvas no disponible'));return;}
+      ctx.fillStyle='#2F6B4F';ctx.fillRect(0,0,size,size);
+      const image=new Image();
+      image.onload=()=>{ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(image,padding,padding,size-padding*2,size-padding*2);resolve(canvas.toDataURL('image/png'));};
+      image.onerror=()=>reject(new Error('No se pudo crear el icono'));
+      image.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(MARK_SVG);
+    });
+  }
+  async function setupInstallAssets(){
+    try{
+      const [icon32,icon180,icon192,icon512,maskable512]=await Promise.all([markPng(32),markPng(180),markPng(192),markPng(512),markPng(512,51)]);
+      const favicon=document.createElement('link');favicon.rel='icon';favicon.type='image/png';favicon.sizes='32x32';favicon.href=icon32;document.head.appendChild(favicon);
+      const apple=document.createElement('link');apple.rel='apple-touch-icon';apple.sizes='180x180';apple.href=icon180;document.head.appendChild(apple);
+      const scope=new URL('./',location.href).href,start=new URL('index.html',scope).href;
+      const dark=effectiveTheme()==='dark',theme=dark?'#101713':'#F2F4EE';
+      const manifest={name:'DogTrainer',short_name:'DogTrainer',display:'standalone',start_url:start,scope,theme_color:theme,background_color:theme,icons:[{src:icon192,sizes:'192x192',type:'image/png',purpose:'any'},{src:icon512,sizes:'512x512',type:'image/png',purpose:'any'},{src:maskable512,sizes:'512x512',type:'image/png',purpose:'maskable'}]};
+      const manifestUrl=URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'}));
+      const link=document.createElement('link');link.rel='manifest';link.href=manifestUrl;document.head.appendChild(link);
+    }catch(_){}
+  }
+  async function setupStoragePersistence(){
+    if(!navigator.storage||location.protocol==='file:')return;
+    try{
+      if(typeof navigator.storage.persisted==='function')storageInfo.persistent=await navigator.storage.persisted();
+      if(storageInfo.persistent===false&&typeof navigator.storage.persist==='function'){
+        let requested=false;
+        try{requested=sessionStorage.getItem('dogtrainer_persist_requested')==='1';if(!requested)sessionStorage.setItem('dogtrainer_persist_requested','1');}catch(_){}
+        if(!requested)storageInfo.persistent=await navigator.storage.persist();
+      }
+      if(typeof navigator.storage.estimate==='function'){
+        const estimate=await navigator.storage.estimate();storageInfo.usage=estimate.usage;storageInfo.quota=estimate.quota;
+      }
+    }catch(err){console.warn('DogTrainer: no se ha podido consultar el almacenamiento',err);}
+    if(tab==='settings'&&state&&!broken)render();
+  }
+  function offerServiceWorkerUpdate(worker){
+    waitingServiceWorker=worker;
+    toast('Hay una versión nueva',{label:'Actualizar',act:'sw-update'});
+  }
+  async function registerServiceWorker(){
+    if(!('serviceWorker' in navigator)||location.protocol==='file:')return;
+    try{
+      const registration=await navigator.serviceWorker.register('./sw.js');
+      if(registration.waiting&&navigator.serviceWorker.controller)offerServiceWorkerUpdate(registration.waiting);
+      registration.addEventListener('updatefound',()=>{
+        const worker=registration.installing;if(!worker)return;
+        worker.addEventListener('statechange',()=>{if(worker.state==='installed'&&navigator.serviceWorker.controller)offerServiceWorkerUpdate(worker);});
+      });
+      navigator.serviceWorker.addEventListener('controllerchange',()=>{
+        let pending=false;try{pending=sessionStorage.getItem('dogtrainer_sw_reload_once')==='pending';}catch(_){}
+        if(!pending)return;
+        try{sessionStorage.setItem('dogtrainer_sw_reload_once','done');}catch(_){}
+        location.reload();
+      });
+      try{if(sessionStorage.getItem('dogtrainer_sw_reload_once')==='done')sessionStorage.removeItem('dogtrainer_sw_reload_once');}catch(_){}
+    }catch(err){console.warn('DogTrainer: no se ha podido activar el modo sin conexión',err);}
+  }
+  function reportGlobalError(detail){
+    console.error('DogTrainer: error global',detail);
+    const now=Date.now();if(now-globalErrorAt<10000)return;globalErrorAt=now;
+    toast('Algo ha fallado. Tus datos no se han modificado.',false,true);
+  }
+  window.addEventListener('error',ev=>reportGlobalError(ev.error||ev.message));
+  window.addEventListener('unhandledrejection',ev=>reportGlobalError(ev.reason));
+  window.addEventListener('storage',ev=>{
+    if(ev.key!==KEY)return;
+    try{
+      const raw=localStorage.getItem(KEY);if(raw===null)invalid('Los datos se han eliminado en otra ventana.');
+      const next=JSON.parse(raw);validate(next);
+      if(modalRoot.innerHTML&&modalDirty){pendingExternalData=next;toast('Hay cambios de otra pestaña. Se aplicarán cuando termines de editar.');return;}
+      if(modalRoot.innerHTML)closeModal();
+      state=next;broken=null;render();toast('Datos actualizados desde otra ventana');
+    }catch(err){console.error('DogTrainer: datos externos rechazados',err);toast('No se han aplicado los datos de otra ventana porque no son válidos.',false,true);}
+  });
+  function updateThemeColor(){if((uiPrefs.theme||'auto')==='auto')applyTheme();}
+  function offerInterruptedActivity(){
+    if(readActive(ACTIVE_WALK_KEY)){showModal(`${modalHeader('Paseo sin terminar')}<p style="margin-bottom:18px">El paseo sigue guardado con todo lo registrado.</p><div class="actions"><button class="secondary" data-act="walk-finish">Terminar con lo registrado</button><button class="primary" data-act="walk-resume">Continuar paseo</button></div>`);return;}
+    if(readActive(ACTIVE_SESSION_KEY))showModal(`${modalHeader('Sesión sin terminar')}<p style="margin-bottom:18px">La sesión sigue guardada con todas sus repeticiones.</p><div class="actions"><button class="danger-btn" data-act="session-discard">Descartar</button><button class="primary" data-act="session-resume">Continuar sesión</button></div>`);
+  }
+  applyTheme();setupInstallAssets();initStore();render();darkMQ?.addEventListener?.('change',updateThemeColor);setupStoragePersistence();registerServiceWorker();if(!broken)offerInterruptedActivity();
+})();
+</script>
+</body>
+</html>
